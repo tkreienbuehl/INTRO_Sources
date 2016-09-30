@@ -34,7 +34,7 @@
 		<link>
 			<name>Sources/Project_Common</name>
 			<type>2</type>
-			<location>/home/tobias/Documents/HSLU/INTRO/projects/INTRO_Sources/Project_Common</location>
+			<locationURI>$%7BPARENT-1-PROJECT_LOC%7D/Project_Common</locationURI>
 		</link>
 	</linkedResources>
 </projectDescription>
