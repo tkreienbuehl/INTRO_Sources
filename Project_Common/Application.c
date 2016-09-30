@@ -104,6 +104,7 @@ static void APP_AdoptToHardware(void) {
 }
 
 void APP_Start(void) {
+	short cnt = 0;
 #if PL_CONFIG_HAS_RTOS
 #if configUSE_TRACE_HOOKS
   PTRC1_uiTraceStart();
@@ -128,7 +129,19 @@ void APP_Start(void) {
 #if PL_CONFIG_HAS_EVENTS
     EVNT_HandleEvent(APP_EventHandler, TRUE);
 #endif
-    WAIT1_Waitms(25); /* just wait for some arbitrary time .... */
+    if ( cnt%2 == 0) {
+    	LED1_Neg();
+    }
+    else {
+    	LED2_Neg();
+    }
+    if (cnt == 1 ) {
+    	cnt = 0;
+    }
+    else {
+    	cnt++;
+    }
+    WAIT1_Waitms(250); /* just wait for some arbitrary time .... */
   }
 #endif
 }
