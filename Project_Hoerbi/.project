@@ -30,4 +30,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>Sources/Project_Common</name>
+			<type>2</type>
+			<location>C:/Users/Wallpaper/Documents/1__5_Studium/2_Intro/2_Eigene_Dateien/Kinetis_Projects/Project_Common</location>
+		</link>
+	</linkedResources>
 </projectDescription>
