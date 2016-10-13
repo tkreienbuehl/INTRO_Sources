@@ -14,6 +14,7 @@
 #include "CS1.h"
 #include "Keys.h"
 #include "KIN1.h"
+#include "HF1.h"
 #if PL_CONFIG_HAS_SHELL
   #include "CLS1.h"
 #endif
@@ -104,7 +105,6 @@ static void APP_AdoptToHardware(void) {
 }
 
 void APP_Start(void) {
-	short cnt = 0;
 #if PL_CONFIG_HAS_RTOS
 #if configUSE_TRACE_HOOKS
   PTRC1_uiTraceStart();
@@ -129,18 +129,7 @@ void APP_Start(void) {
 #if PL_CONFIG_HAS_EVENTS
     EVNT_HandleEvent(APP_EventHandler, TRUE);
 #endif
-    if ( cnt%2 == 0) {
-    	LED1_Neg();
-    }
-    else {
-    	LED2_Neg();
-    }
-    if (cnt == 1 ) {
-    	cnt = 0;
-    }
-    else {
-    	cnt++;
-    }
+    EVNT_SetEvent((EVNT_Handle)EVNT_LED_HEARTBEAT);
     WAIT1_Waitms(250); /* just wait for some arbitrary time .... */
   }
 #endif
