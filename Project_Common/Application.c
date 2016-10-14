@@ -15,7 +15,7 @@
 #include "Keys.h"
 #include "KIN1.h"
 #include "HF1.h"
-#include "timer.h"
+#include "Timer.h"
 #include "SW1.h"
 #if PL_CONFIG_HAS_SHELL
   #include "CLS1.h"
