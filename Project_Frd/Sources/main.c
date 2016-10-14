@@ -30,6 +30,15 @@
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
+#include "LEDPin1.h"
+#include "BitIoLdd10.h"
+#include "LEDPin2.h"
+#include "BitIoLdd11.h"
+#include "LEDPin3.h"
+#include "BitIoLdd12.h"
+#include "TI1.h"
+#include "TimerIntLdd1.h"
+#include "TU1.h"
 #include "WAIT1.h"
 #include "UTIL1.h"
 #include "KSDK1.h"
@@ -42,6 +51,7 @@
 #include "PE_Const.h"
 #include "IO_Map.h"
 /* User includes (#include below this line is not maintained by Processor Expert) */
+#include "Application.h"
 
 /*lint -save  -e970 Disable MISRA rule (6.3) checking. */
 int main(void)
@@ -54,6 +64,7 @@ int main(void)
   /*** End of Processor Expert internal initialization.                    ***/
 
   /* Write your code here */
+  APP_Start();
   /* For example: for(;;) { } */
 
   /*** Don't write any code pass this line, or it will be deleted during code generation. ***/
