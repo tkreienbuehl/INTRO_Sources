@@ -16,6 +16,7 @@
 #include "KIN1.h"
 #include "HF1.h"
 #include "timer.h"
+#include "SW1.h"
 #if PL_CONFIG_HAS_SHELL
   #include "CLS1.h"
 #endif
@@ -57,7 +58,7 @@ void APP_EventHandler(EVNT_Handle event) {
   case EVNT_SW1_PRESSED:
     LED2_Neg();
     //CLS1_SendStr("SW1 pressed\r\n", CLS1_GetStdio()->stdOut);
-    SHELL_SendString("SW1 pressed\r\n");
+    //SHELL_SendString("SW1 pressed\r\n");
     #if PL_CONFIG_HAS_BUZZER
     BUZ_PlayTune(BUZ_TUNE_BUTTON);
     #endif
@@ -131,6 +132,7 @@ void APP_Start(void) {
 #endif
    // EVNT_SetEvent((EVNT_Handle)EVNT_LED_HEARTBEAT);
     WAIT1_Waitms(25); /* just wait for some arbitrary time .... */
+    SW1_GetVal();
   }
 #endif
 }
