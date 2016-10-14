@@ -15,6 +15,7 @@
 #include "Keys.h"
 #include "KIN1.h"
 #include "HF1.h"
+#include "timer.h"
 #if PL_CONFIG_HAS_SHELL
   #include "CLS1.h"
 #endif
@@ -51,7 +52,6 @@ void APP_EventHandler(EVNT_Handle event) {
   case EVNT_LED_HEARTBEAT:
     LED1_Neg();
     break;
-
 #if PL_CONFIG_HAS_KEYS
   #if PL_CONFIG_NOF_KEYS>=1
   case EVNT_SW1_PRESSED:
@@ -129,8 +129,8 @@ void APP_Start(void) {
 #if PL_CONFIG_HAS_EVENTS
     EVNT_HandleEvent(APP_EventHandler, TRUE);
 #endif
-    EVNT_SetEvent((EVNT_Handle)EVNT_LED_HEARTBEAT);
-    WAIT1_Waitms(250); /* just wait for some arbitrary time .... */
+   // EVNT_SetEvent((EVNT_Handle)EVNT_LED_HEARTBEAT);
+    WAIT1_Waitms(25); /* just wait for some arbitrary time .... */
   }
 #endif
 }

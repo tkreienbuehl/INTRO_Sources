@@ -28,6 +28,7 @@
 
 #include "Cpu.h"
 #include "Events.h"
+#include "Timer.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,71 +57,6 @@ void Cpu_OnNMIINT(void)
 
 /*
 ** ===================================================================
-**     Event       :  FRTOS1_vApplicationStackOverflowHook (module Events)
-**
-**     Component   :  FRTOS1 [FreeRTOS]
-**     Description :
-**         if enabled, this hook will be called in case of a stack
-**         overflow.
-**     Parameters  :
-**         NAME            - DESCRIPTION
-**         pxTask          - Task handle
-**       * pcTaskName      - Pointer to task name
-**     Returns     : Nothing
-** ===================================================================
-*/
-void FRTOS1_vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
-{
-  /* This will get called if a stack overflow is detected during the context
-     switch.  Set configCHECK_FOR_STACK_OVERFLOWS to 2 to also check for stack
-     problems within nested interrupts, but only do this for debug purposes as
-     it will increase the context switch time. */
-  (void)pxTask;
-  (void)pcTaskName;
-  taskDISABLE_INTERRUPTS();
-  /* Write your code here ... */
-  for(;;) {}
-}
-
-/*
-** ===================================================================
-**     Event       :  FRTOS1_vApplicationTickHook (module Events)
-**
-**     Component   :  FRTOS1 [FreeRTOS]
-**     Description :
-**         If enabled, this hook will be called by the RTOS for every
-**         tick increment.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void FRTOS1_vApplicationTickHook(void)
-{
-  /* Called for every RTOS tick. */
-  /* Write your code here ... */
-}
-
-/*
-** ===================================================================
-**     Event       :  FRTOS1_vApplicationIdleHook (module Events)
-**
-**     Component   :  FRTOS1 [FreeRTOS]
-**     Description :
-**         If enabled, this hook will be called when the RTOS is idle.
-**         This might be a good place to go into low power mode.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void FRTOS1_vApplicationIdleHook(void)
-{
-  /* Called whenever the RTOS is idle (from the IDLE task).
-     Here would be a good place to put the CPU into low power mode. */
-  /* Write your code here ... */
-}
-
-/*
-** ===================================================================
 **     Event       :  FRTOS1_vApplicationMallocFailedHook (module Events)
 **
 **     Component   :  FRTOS1 [FreeRTOS]
@@ -141,6 +77,25 @@ void FRTOS1_vApplicationMallocFailedHook(void)
   taskDISABLE_INTERRUPTS();
   /* Write your code here ... */
   for(;;) {}
+}
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void TI1_OnInterrupt(void)
+{
+	TMR_OnInterrupt();
 }
 
 /* END Events */
