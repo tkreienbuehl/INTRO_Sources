@@ -132,7 +132,6 @@ void APP_Start(void) {
 #endif
    // EVNT_SetEvent((EVNT_Handle)EVNT_LED_HEARTBEAT);
     WAIT1_Waitms(25); /* just wait for some arbitrary time .... */
-    SW1_GetVal();
   }
 #endif
 }
