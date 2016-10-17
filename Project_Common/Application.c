@@ -57,7 +57,14 @@ void APP_EventHandler(EVNT_Handle event) {
   #if PL_CONFIG_NOF_KEYS>=1
   case EVNT_SW1_PRESSED:
     LED2_Neg();
-    CLS1_SendStr("SW1 pressed\r\n", CLS1_GetStdio()->stdOut);
+    CLS1_SendStr((const uint8*)"SW1 pressed\r\n", CLS1_GetStdio()->stdOut);
+    //SHELL_SendString("SW1 pressed\r\n");
+    #if PL_CONFIG_HAS_BUZZER
+    BUZ_PlayTune(BUZ_TUNE_BUTTON);
+    #endif
+    break;
+  case EVNT_SW2_PRESSED:
+    CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
     //SHELL_SendString("SW1 pressed\r\n");
     #if PL_CONFIG_HAS_BUZZER
     BUZ_PlayTune(BUZ_TUNE_BUTTON);
@@ -116,7 +123,10 @@ void APP_Start(void) {
   EVNT_SetEvent(EVNT_STARTUP);
 #endif
 #if CLS1_DEFAULT_SERIAL
-  CLS1_SendStr("Hello World!\r\n", CLS1_GetStdio()->stdOut);
+  CLS1_SendStr((const uint8_t*)"Hello World!\r\n", CLS1_GetStdio()->stdOut);
+#endif
+#if PL_CONFIG_HAS_KEYS
+    KEY_Init();
 #endif
   APP_AdoptToHardware();
 #if PL_CONFIG_HAS_RTOS
