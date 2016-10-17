@@ -1,0 +1,18 @@
+\frametitle{Un exemple avec deux colonnes}
+  \begin{columns}
+    \begin{column}{0.45\linewidth}
+      Bla bla bla bla bla bla
+      Une image
+      \begin{center}
+        \includegraphics[width=3cm]{images/logo-isae-court}
+      \end{center}
+    \end{column}
+    \begin{column}{0.45\linewidth}
+      Du code source
+\begin{verbatim}
+cd /home/user
+make && make install
+\end{verbatim}
+      Une citation : \cite{Roque2012}.
+    \end{column}
+  \end{columns}

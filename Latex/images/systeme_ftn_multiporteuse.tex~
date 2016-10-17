@@ -1,0 +1,45 @@
+\tikzstyle{block} = [draw, fill=blue!20, rectangle, minimum height=2em, minimum width=2em]
+\tikzstyle{filter} = [draw, fill=blue!20, rectangle, minimum height=2em, minimum width=3em]
+\tikzstyle{sum} = [draw, fill=blue!20, circle]
+\tikzstyle{input} = [coordinate]
+\begin{tikzpicture}[auto, node distance=3.5cm,>=latex']
+\shorthandoff{:} % Evite le bug de compilation avec tikz
+    % Longueurs et espacement
+    \def\longabove{0.2cm}
+    \def\espacement{2cm}
+
+    % Définition des blocs
+    \node [filter, node distance=\espacement] (filtregm) {$g_m$};
+    \node [filter, above of=filtregm, node distance=\espacement] (filtreg0) {$g_0$};
+    \node [filter, below of=filtregm, node distance=\espacement] (filtregM) {$g_{M-1}$};
+    \node [sum, right of=filtregm, node distance=\espacement] (outtx) {};
+    \draw (outtx.north) -- (outtx.south);
+    \draw (outtx.east) -- (outtx.west);
+    \node [filter, dashed, right of=outtx, node distance=\espacement] (canal) {Canal};
+    \node [coordinate, right of=canal,node distance=\espacement] (inrx) {};
+    \node [filter,right of=inrx, node distance=\espacement] (filtregcm) {$\check{g}_m^H$};
+    \node [filter,above of=filtregcm, node distance=\espacement] (filtregc0) {$\check{g}_0^H$};
+    \node [filter,below of=filtregcm, node distance=\espacement] (filtregcM) {$\check{g}_{M-1}^H$};
+
+    % Définition des liens
+    \draw [<-,double] (filtreg0) -- ++(-1,0) node[left] {$\{c_{0,n}\}$};
+    \draw [<-,double] (filtregm) -- ++(-1,0) node[left] {$\{c_{m,n}\}$};
+    \draw [<-,double] (filtregM) -- ++(-1,0) node[left] {$\{c_{M-1,n}\}$};
+    \draw [->,double] (filtreg0) -| (outtx);
+    \draw [->,double] (filtregm) -- (outtx);
+    \draw [->,double] (filtregM) -| (outtx);
+    \draw [->,double] (outtx) -- node[above] {$s(t)$} (canal);
+    \draw [-,double] (canal) -- node[above] {$r(t)$} (inrx);
+    \draw [->,double] (inrx) |- (filtregc0);
+    \draw [->,double] (inrx) -- (filtregcm);
+    \draw [->,double] (inrx) |- (filtregcM);
+    \draw [->,double] (filtregc0.east) -- ++(1,0) --  ++(0.33,0.33)  ++(0,-0.33) node[below] {$n T_0$} -- ++(1,0) node[right] {$\{\tilde{c}_{0,n}\}$};
+    \draw [->,double] (filtregcm.east) -- ++(1,0) --  ++(0.33,0.33)  ++(0,-0.33) node[below] {$n T_0$} -- ++(1,0) node[right] {$\{\tilde{c}_{m,n}\}$};
+    \draw [->,double] (filtregcM.east) -- ++(1,0) --  ++(0.33,0.33)  ++(0,-0.33) node[below] {$n T_0$} -- ++(1,0) node[right] {$\{\tilde{c}_{M-1,n}\}$};
+\end{tikzpicture}
+
+
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: "figures_tikz"
+%%% End: 

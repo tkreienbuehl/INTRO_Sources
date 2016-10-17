@@ -1,0 +1,57 @@
+%\begin{tikzpicture}[x=0.8cm,y=0.8cm]
+  \newcommand{\motif}[4]{\draw[fill=blue!20,fill opacity=0.5] (#1,#2) ellipse (#3 and #4);}
+  % \newcommand{\motif}[4]{\draw[fill=black] (#1,#2) ellipse (#3 and #4);}
+  \newcommand{\motifambi}[4]{\draw[fill=red!20] (#1,#2) ellipse (#3 and #4);}
+  % Configuration du treillis temps-fréquence et de la fonction de diffusion
+  \def\Fzero{1}
+  \def\Tzero{1.5}
+  \def\tauzero{0.5}
+  \def\fzero{0.3}
+  \def\sigmat{0.7}
+  \def\sigmanu{0.5}
+  \def\fmin{2}
+  \def\fmax{2}
+  \def\tmin{3}
+  \def\tmax{3}
+  \def\margeaxes{0.5}
+  \pgfmathsetmacro\deltat{ -\tmin + \Tzero}
+  \pgfmathsetmacro\deltaf{ -\fmin + \Fzero}
+  % Axes
+  \draw[->,color=black] (-\tmin-\margeaxes,0) -- (\tmax+\margeaxes,0) node[right] {$t$};
+  \draw[->,color=black] (0,-\fmin-\margeaxes) -- (0,\fmax+\margeaxes) node[right] {$\nu$};
+  % \draw (\tmax,\fmax) node[above left] {$\Lambda$};
+  % Restriction de la zone à afficher
+  \clip (-\tmin,-\fmin) rectangle (\tmin,\fmin);
+  % Disposition du motif de fonction de diffusion
+  \foreach \t in {-\tmin,\deltat ,...,\tmax} {
+    \foreach \f in {-\fmin,\deltaf ,...,\fmax} {
+      {\ifthenelse{\equal{\f}{0} \and \equal{\t}{0}}{\motif{\t}{\f}{\tauzero}{\fzero}}{\motif{\t}{\f}{\tauzero}{\fzero}}}
+    }
+  }
+  % Disposition du motif de la fonction d'interambiguité
+  % \motifambi{0}{0}{\sigmat}{\sigmanu}
+  
+  % Quadrillage du plan temps
+  \foreach \t in {-\tmin,\deltat ,...,\tmax} {
+    {\ifthenelse{\equal{\t}{0}}{}{\draw[style=dashed] (\t,-\fmin) -- (\t,\fmax);}}
+  }
+  % Quadrillage du plan fréquence
+  \foreach \f in {-\fmin,\deltaf ,...,\fmax} {
+    {\ifthenelse{\equal{\f}{0}}{}{\draw[style=dashed] (-\tmin,\f) -- (\tmax,\f);}}
+  }
+  % On redessine les axes par dessus les pointillés
+  \draw[->,color=black] (-\tmin-\margeaxes,0) -- (\tmax+\margeaxes,0) node[right] {$k$};
+  \draw[->,color=black] (0,-\fmin-\margeaxes) -- (0,\fmax+\margeaxes) node[right] {$\nu$};
+  % Affichage des légendes
+  % \node[coordinate] (Tzero) at (0,\Tzero) {$T_0$};
+  \draw (\Tzero,0) node[below left] {$T_0$};
+  \draw (0,\Fzero) node[below left] {$F_0$};
+  % \draw[<->] (-\Tzero,-\Fzero) -- node[below] {$\sigma_t/2$} (-\Tzero+\tauzero,-\Fzero);
+  % \draw[<->] (-\Tzero,-\Fzero) -- node[left] {$\sigma_\nu/2$} (-\Tzero,-\Fzero+\fzero);
+  % \draw[<->] (0,0) -- node[below] {$\sigma_t/2$} (\sigmat,0);
+  % \draw[<->] (0,0) -- node[left] {$\sigma_\nu/2$} (0,\sigmanu);
+%\end{tikzpicture}
+%%% Local Variables: 
+%%% mode: latex
+%%% TeX-master: t
+%%% End: 
