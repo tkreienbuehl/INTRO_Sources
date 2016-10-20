@@ -5,7 +5,7 @@
 
 \documentclass{beamer}
 \usepackage[utf8]{inputenc}
-\usepackage[frenchb]{babel}
+\usepackage[ngerman]{babel}
 \usepackage{palatino}
 \usepackage{graphicx}
 \graphicspath{{./images/}}
@@ -97,12 +97,11 @@
 \node[anchor=north east,yshift=4pt] at (current page.north east) {\includegraphics[height=0.8cm]{images/logo-isae-long-sans-texte}};
 \end{tikzpicture}}
 
-\title[Titre court]{Recap Taster und Console}
+\title[Recap keys \& console]{Recap Taster und Console}
 
 \author[Tobias Kreienbühl Silvan Ritz]{\small Tobias Kreienbühl, Silvan Ritz}
 
 %\date{23 janvier 2014}
-
 
 % Clear the navigation bar
 \setbeamertemplate{navigation symbols}{}
@@ -130,16 +129,20 @@
   \frametitle{Plan}
   \small
   %\tableofcontents[hideothersubsections]
-  %\tableofcontents[currentsubsection,hideothersubsections]
-  \tableofcontents[currentsubsection]
+  \tableofcontents[currentsection,hideothersections]
+  %\tableofcontents[currentsubsection]
   \normalsize
 \end{frame}
 }
 
+\section{Keys}
 \input{keys.tex}
+\section{Console}
+\input{console.tex}
+\section{Quiz}
 \input{questions.tex}
 
-\section{Première partie}
+
 \label{sec:partie1}
 
 \begin{frame}
@@ -155,7 +158,6 @@
   \end{equation}
 \end{frame}
 
-\section{Deuxième partie}
 \label{sec:partie2}
 
 \begin{frame}[fragile]
