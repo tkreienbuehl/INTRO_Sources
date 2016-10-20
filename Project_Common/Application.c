@@ -63,6 +63,7 @@ void APP_EventHandler(EVNT_Handle event) {
     BUZ_PlayTune(BUZ_TUNE_BUTTON);
     #endif
     break;
+  #if PL_CONFIG_NOF_KEYS>=2
   case EVNT_SW2_PRESSED:
     CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
     //SHELL_SendString("SW1 pressed\r\n");
@@ -70,6 +71,7 @@ void APP_EventHandler(EVNT_Handle event) {
     BUZ_PlayTune(BUZ_TUNE_BUTTON);
     #endif
     break;
+  #endif
   #endif
 #endif /* PL_CONFIG_HAS_KEYS */
 
