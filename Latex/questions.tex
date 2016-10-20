@@ -4,13 +4,41 @@
 \begin{frame}
   \frametitle{Fragen}
 	    \begin{column}{1\linewidth}
-		Phillip hat einen Taster auf seinem Board in Betrieb genommen. Er hat die Interrupt’s eingeschaltet und möchte einen Interrupt wenn der Taster gedrückt ist. Er bekommt aber unregelmässig einen Interrupt, ohne das der Taster gedrückt ist. An was könnte das liegen?
+		Philipp hat einen Taster auf seinem Robo V2 in Betrieb genommen. Er hat die Interrupt’s eingeschaltet und möchte einen Interrupt wenn der Taster gedrückt ist. Er bekommt aber unregelmässig Interrupt's, ohne das der Taster gedrückt worden ist. An was könnte das liegen?
 	    \end{column}
 \end{frame}
 
 \begin{frame}
 	\frametitle{Fragen}
 	\begin{column}{1\linewidth}
-	Nico wechselt von dem Roboterboard V1 zur V2. Er hat ein Testprogramm geschrieben, welche ihm die Anzahl Tastendrücke zählt. Auf dem Robo V1 hat es gut funktioniert, aber auf dem V2 hat er zu viele Tastendrücke registriert. Was ist bei V2 anders, und wie könnte Nico es trotzdem zum laufen bringen?
+		Die Pull- Widerstände sind nicht eingeschaltet. Somit ist der Zustand zwischen den Tastendrücken nicht definiert und so kann es zu ungewollten Interrupts kommen. 
+	\end{column}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		Jonas liest den Taster mit Polling ein. Am Anfang des Projektes funktioniert alles wunderbar. Aber im laufe des Projektes erkennt das Programm nicht mehr alle Tastendrücke. An was könnte das liegen?
+	\end{column}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		Wenn über polling Taster eingelesen werden, muss sichergestellt werden, dass die Pollingfunktion genug häufig Aufgerufen wird. Ist dies nicht der Fall, können Tastendrücke verloren gehen. (Am Anfang des Projektes hatte die Pollingfunktion genug Rechenzeit. Aber mit dem wachsen des Projektes hat diese Funktion nun weniger Rechenzeit.)
+	\end{column}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+	Nico wechselt von dem Roboterboard V1 zur V2. Er hat ein Testprogramm geschrieben, welche ihm die Anzahl Tastendrücke zählt. Auf dem Robo V1 hat es gut funktioniert, aber auf dem V2 hat er zu viele Tastendrücke registriert. Was ist bei V2 anders, und wie könnte Nico es trotzdem zum laufen bringen? (Die Pull-Widerstände sind aktiviert)
+	\end{column}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		Der Robo V1 hat einen Entprellungskondensator am Taster. Der V2 hat dies nicht. Da Nico den Taster nicht Softwaremässig entprellt hat, zählt er zuviele Tastendrücke.
 	\end{column}
 \end{frame}
