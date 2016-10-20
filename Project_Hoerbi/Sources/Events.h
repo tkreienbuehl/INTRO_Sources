@@ -37,6 +37,8 @@
 #include "BitIoLdd1.h"
 #include "LEDPin2.h"
 #include "BitIoLdd2.h"
+#include "BUZ1.h"
+#include "BitIoLdd4.h"
 #include "SW1.h"
 #include "BitIoLdd3.h"
 #include "CLS1.h"
