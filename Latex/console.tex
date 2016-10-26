@@ -59,16 +59,33 @@
 	    \begin{column}{1\linewidth}
 	    	\textbf{Port finden bei Windows:}\\
 	    	\begin{center}
-	    		\includegraphics[width=0.8\textwidth]{images/COM_Windows.png}
+	    		\includegraphics[width=0.7\textwidth]{images/COM_Windows.png}
 	    	\end{center}
+	    	Achtung: Bei Windows 7 kann es passieren, dass der Port blockiert!\\[0.2cm]
 	    	\textbf{Bei Linux:}\\
-	    	Terminal öffnen und den Befehl: 
+	    	Terminal öffnen und den untenstehenden Befehl ausführen.
 			\begin{verbatim}
-			dmesg | grep tty
+				dmesg | grep tty
 			\end{verbatim}
-	    	ausführen. (Bei mir \textbf{ttyACM0})
-	    	\begin{center}
-	    		\includegraphics[width=0.8\textwidth]{images/Console_Result_dmesc.png}
+			\begin{center}	    	
+	    		\includegraphics[width=0.7\textwidth]{images/Console_Result_dmesc.png}
 	    	\end{center}
+	    \end{column}
+\end{frame}
+
+\begin{frame}
+  \frametitle{Shell Standard I/O}
+	    \begin{column}{1\linewidth}
+	    	\textbf{I/O Strukturen mit Callback}\\
+			\begin{itemize}
+			\item \textbf{Stdin}: Zeichen (char) lesen
+			\item \textbf{Stdout}: Zeichen schreiben
+			\item \textbf{Stderr}: Zeichen schreiben
+			\item \textbf{KeyPressed}: Zeichen anstehend in Stdin?
+			\end{itemize}
+	    	\textbf{Zeichenketten (Strings) und Zahlen senden (nicht printf):}
+			\begin{center}	    	
+	    		\includegraphics[width=0.6\textwidth]{images/Write_chars.png}
+	    	\end{center}	    	
 	    \end{column}
 \end{frame}

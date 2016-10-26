@@ -42,3 +42,35 @@
 		Der Robo V1 hat einen Entprellungskondensator am Taster. Der V2 hat dies nicht. Da Nico den Taster nicht Softwaremässig entprellt hat, zählt er zuviele Tastendrücke.
 	\end{column}
 \end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		Paul hat einen neuen PC mit Debian installiert und möchte nun seinen Robo mit der Konsole verbinden. Nun weiss er nicht, an welchem Port der Robo hängt. Wie kann er dies herausfinden?
+	\end{column}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		Im Terminal von Debian (und allen weiteren bekannten Linux-Varianten) können mittels einem Suchbefehl die angeschlossenen Geräte angezeigt werden.
+		\begin{verbatim}
+			dmesg | grep tty
+		\end{verbatim}
+	\end{column}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		Eugen möchte gerne Strings über die Shell senden. Zuerst denkt er an \textit{printf} erinnert sich dann aber daran, dass die Shell-Komponente von Processor Expert eigene Methoden zum Senden anbietet. Was ist deren Vorteil?
+	\end{column}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Fragen}
+	\begin{column}{1\linewidth}
+		\textit{printf} ist eine grössere Implementation und verbraucht daher auf einem Mikrocontroller zu viel Speicher, die in der Shell-Komponente angebotenen Methoden sind Anwendungsoptimiert und schlank gehalten.
+	\end{column}
+\end{frame}
+

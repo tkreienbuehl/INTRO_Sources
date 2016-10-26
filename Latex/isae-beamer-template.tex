@@ -99,14 +99,14 @@
 
 \title[Recap keys \& console]{Recap Taster und Console}
 
-\author[Tobias Kreienbühl Silvan Ritz]{\small Tobias Kreienbühl, Silvan Ritz}
+\author[Tobias Kreienbühl \& Silvan Ritz]{\small Tobias Kreienbühl, Silvan Ritz}
 
-%\date{23 janvier 2014}
+%\date{\today}
 
 % Clear the navigation bar
 \setbeamertemplate{navigation symbols}{}
  
-\subject{Sujet de la présentation}
+%\subject{Sujet de la présentation}
 
 \begin{document}
 
@@ -126,7 +126,7 @@
 \AtBeginSection[]
 {%
 \begin{frame}
-  \frametitle{Plan}
+  \frametitle{Ablauf}
   \small
   %\tableofcontents[hideothersubsections]
   \tableofcontents[currentsection,hideothersections]
@@ -139,66 +139,11 @@
 \input{keys.tex}
 \section{Console}
 \input{console.tex}
-\section{Quiz}
+\section{Fragen}
 \input{questions.tex}
-
-
-\label{sec:partie1}
-
-\begin{frame}
-  \frametitle{Introduction}
-  Voici un exemple.
-  \begin{block}{Un exemple de bloc}
-    Avec son contenu.
-  \end{block}
-  Une équation :
-  \begin{equation}
-    \label{eq:tranformee-fourier}
-    S(f) = \intinf s(t) e^{-j2\pi f t} \ud t.
-  \end{equation}
-\end{frame}
-
-\label{sec:partie2}
-
-\begin{frame}[fragile]
-  \frametitle{Un exemple avec deux colonnes}
-  \begin{columns}
-    \begin{column}{0.45\linewidth}
-      Bla bla bla bla bla bla
-      Une image
-      \begin{center}
-        \includegraphics[width=3cm]{images/Pullup.PNG}
-      \end{center}
-    \end{column}
-    \begin{column}{0.45\linewidth}
-      Du code source
-\begin{verbatim}
-cd /home/user
-make && make install
-\end{verbatim}
-      Une citation : \cite{Roque2012}.
-    \end{column}
-  \end{columns}
-\end{frame}
-
-
-\begin{frame}
-  \frametitle{Questions}
-  \begin{center}
-    Merci pour votre attention.
-
-    Avez-vous des questions ?
-  \end{center}
-\end{frame}
 
 \newcounter{lastframe}
 \setcounter{lastframe}{\insertframenumber}
-
-\begin{frame}[allowframebreaks]{References}
-\bibliographystyle{authoryear-fr}
-\bibliography{references}
-\end{frame}
-
 \setcounter{framenumber}{\thelastframe}
 
 \end{document}
