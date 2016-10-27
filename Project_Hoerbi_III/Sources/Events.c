@@ -28,6 +28,7 @@
 
 #include "Cpu.h"
 #include "Events.h"
+#include "Timer.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,6 +57,49 @@ void Cpu_OnNMIINT(void)
 
 /*
 ** ===================================================================
+**     Event       :  FRTOS1_vApplicationMallocFailedHook (module Events)
+**
+**     Component   :  FRTOS1 [FreeRTOS]
+**     Description :
+**         If enabled, the RTOS will call this hook in case memory
+**         allocation failed.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void FRTOS1_vApplicationMallocFailedHook(void)
+{
+  /* Called if a call to pvPortMalloc() fails because there is insufficient
+     free memory available in the FreeRTOS heap.  pvPortMalloc() is called
+     internally by FreeRTOS API functions that create tasks, queues, software
+     timers, and semaphores.  The size of the FreeRTOS heap is set by the
+     configTOTAL_HEAP_SIZE configuration constant in FreeRTOSConfig.h. */
+  taskDISABLE_INTERRUPTS();
+  /* Write your code here ... */
+  for(;;) {}
+}
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void TI1_OnInterrupt(void)
+{
+	TMR_OnInterrupt();
+}
+
+/*
+** ===================================================================
 **     Event       :  FRTOS1_vApplicationStackOverflowHook (module Events)
 **
 **     Component   :  FRTOS1 [FreeRTOS]
@@ -77,30 +121,6 @@ void FRTOS1_vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
      it will increase the context switch time. */
   (void)pxTask;
   (void)pcTaskName;
-  taskDISABLE_INTERRUPTS();
-  /* Write your code here ... */
-  for(;;) {}
-}
-
-/*
-** ===================================================================
-**     Event       :  FRTOS1_vApplicationMallocFailedHook (module Events)
-**
-**     Component   :  FRTOS1 [FreeRTOS]
-**     Description :
-**         If enabled, the RTOS will call this hook in case memory
-**         allocation failed.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void FRTOS1_vApplicationMallocFailedHook(void)
-{
-  /* Called if a call to pvPortMalloc() fails because there is insufficient
-     free memory available in the FreeRTOS heap.  pvPortMalloc() is called
-     internally by FreeRTOS API functions that create tasks, queues, software
-     timers, and semaphores.  The size of the FreeRTOS heap is set by the
-     configTOTAL_HEAP_SIZE configuration constant in FreeRTOSConfig.h. */
   taskDISABLE_INTERRUPTS();
   /* Write your code here ... */
   for(;;) {}
@@ -141,25 +161,6 @@ void FRTOS1_vApplicationIdleHook(void)
   /* Called whenever the RTOS is idle (from the IDLE task).
      Here would be a good place to put the CPU into low power mode. */
   /* Write your code here ... */
-}
-
-/*
-** ===================================================================
-**     Event       :  TI1_OnInterrupt (module Events)
-**
-**     Component   :  TI1 [TimerInt]
-**     Description :
-**         When a timer interrupt occurs this event is called (only
-**         when the component is enabled - <Enable> and the events are
-**         enabled - <EnableEvent>). This event is enabled only if a
-**         <interrupt service/event> is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void TI1_OnInterrupt(void)
-{
-	TMR_OnInterrupt();
 }
 
 /* END Events */

@@ -23,6 +23,12 @@ static void AppTask(void* param) {
     } else if (*whichLED==2) {
       LED2_Neg();
     }
+#if PL_CONFIG_HAS_KEYS
+    KEY_Scan();
+#endif
+#if PL_CONFIG_HAS_EVENTS
+    EVNT_HandleEvent(APP_EventHandler, TRUE);
+#endif
     /* \todo handle your application code here */
     //FRTOS1_vTaskDelay(pdMS_TO_TICKS(500));
   }

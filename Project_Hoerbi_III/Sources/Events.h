@@ -44,10 +44,10 @@
 #include "AS1.h"
 #include "ASerialLdd3.h"
 #include "CLS1.h"
+#include "FRTOS1.h"
 #include "TU1.h"
 #include "TI1.h"
 #include "TimerIntLdd1.h"
-#include "FRTOS1.h"
 #include "KIN1.h"
 #include "UTIL1.h"
 #include "WAIT1.h"
@@ -74,6 +74,35 @@ extern "C" {
 /* ===================================================================*/
 void Cpu_OnNMIINT(void);
 
+void FRTOS1_vApplicationMallocFailedHook(void);
+/*
+** ===================================================================
+**     Event       :  FRTOS1_vApplicationMallocFailedHook (module Events)
+**
+**     Component   :  FRTOS1 [FreeRTOS]
+**     Description :
+**         If enabled, the RTOS will call this hook in case memory
+**         allocation failed.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+
+/*
+** ===================================================================
+**     Event       :  TI1_OnInterrupt (module Events)
+**
+**     Component   :  TI1 [TimerInt]
+**     Description :
+**         When a timer interrupt occurs this event is called (only
+**         when the component is enabled - <Enable> and the events are
+**         enabled - <EnableEvent>). This event is enabled only if a
+**         <interrupt service/event> is enabled.
+**     Parameters  : None
+**     Returns     : Nothing
+** ===================================================================
+*/
+void TI1_OnInterrupt(void);
 
 void FRTOS1_vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName);
 /*
@@ -88,20 +117,6 @@ void FRTOS1_vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 **         NAME            - DESCRIPTION
 **         pxTask          - Task handle
 **       * pcTaskName      - Pointer to task name
-**     Returns     : Nothing
-** ===================================================================
-*/
-
-void FRTOS1_vApplicationMallocFailedHook(void);
-/*
-** ===================================================================
-**     Event       :  FRTOS1_vApplicationMallocFailedHook (module Events)
-**
-**     Component   :  FRTOS1 [FreeRTOS]
-**     Description :
-**         If enabled, the RTOS will call this hook in case memory
-**         allocation failed.
-**     Parameters  : None
 **     Returns     : Nothing
 ** ===================================================================
 */
@@ -133,22 +148,6 @@ void FRTOS1_vApplicationIdleHook(void);
 **     Returns     : Nothing
 ** ===================================================================
 */
-
-/*
-** ===================================================================
-**     Event       :  TI1_OnInterrupt (module Events)
-**
-**     Component   :  TI1 [TimerInt]
-**     Description :
-**         When a timer interrupt occurs this event is called (only
-**         when the component is enabled - <Enable> and the events are
-**         enabled - <EnableEvent>). This event is enabled only if a
-**         <interrupt service/event> is enabled.
-**     Parameters  : None
-**     Returns     : Nothing
-** ===================================================================
-*/
-void TI1_OnInterrupt(void);
 
 /* END Events */
 
