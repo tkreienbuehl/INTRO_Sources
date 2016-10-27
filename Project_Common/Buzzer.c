@@ -41,7 +41,7 @@ static const BUZ_Tune MelodyWelcome[] =
     {600,80},
     {800,80},
 	{400,80},
-	{1000,100},
+	{1000,300},
 };
 
 static const BUZ_Tune MelodyButton[] =

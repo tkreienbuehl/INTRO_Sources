@@ -23,12 +23,6 @@ static void AppTask(void* param) {
     } else if (*whichLED==2) {
       LED2_Neg();
     }
-#if PL_CONFIG_HAS_KEYS
-    KEY_Scan();
-#endif
-#if PL_CONFIG_HAS_EVENTS
-    EVNT_HandleEvent(APP_EventHandler, TRUE);
-#endif
     /* \todo handle your application code here */
     //FRTOS1_vTaskDelay(pdMS_TO_TICKS(500));
   }
@@ -41,7 +35,10 @@ void RTOS_Init(void) {
   EVNT_SetEvent(EVNT_STARTUP); /* set startup event */
   /*! \todo Create tasks here */
   if (FRTOS1_xTaskCreate(AppTask, (signed portCHAR *)"App1", configMINIMAL_STACK_SIZE, (void*)&led1, tskIDLE_PRIORITY, NULL) != pdPASS) {
-    for(;;){} /* error case only, stay here! */
+	  for(;;){} /* error case only, stay here! */
+  }
+  if (FRTOS1_xTaskCreate(AppTask, (signed portCHAR *)"App2", configMINIMAL_STACK_SIZE, (void*)&led2, tskIDLE_PRIORITY, NULL) != pdPASS) {
+	  for(;;){}
   }
 }
 
