@@ -13,24 +13,41 @@
 #include "Keys.h"
 #include "Application.h"
 
+void led1Neg(void) {
+	LED1_Neg();
+}
+
+void led2Neg(void) {
+	LED2_Neg();
+}
+
 static void AppTask(void* param) {
-  const int *whichLED = (int*)param;
+  //const int *whichLED = (int*)param;
+
+  const led_t* led = (led_t*)param;
 
   (void)param; /* avoid compiler warning */
   for(;;) {
-    if (*whichLED==1) {
-      LED1_Neg();
-    } else if (*whichLED==2) {
-      LED2_Neg();
-    }
+    //if (led->wichLed==1) {
+      //LED1_Neg();
+    //} else if (led->wichLed==2) {
+      //LED2_Neg();
+    //}
+	led->callbackFunct();
     /* \todo handle your application code here */
-    //FRTOS1_vTaskDelay(pdMS_TO_TICKS(500));
+    FRTOS1_vTaskDelay(pdMS_TO_TICKS(led->blinkFrequency));
   }
 }
 
 void RTOS_Init(void) {
-  static const int led1 = 1;
-  static const int led2 = 2;
+  static led_t led1;
+  static led_t led2;
+
+  led1.blinkFrequency = 200;
+  led1.callbackFunct = led1Neg;
+
+  led2.blinkFrequency = 500;
+  led2.callbackFunct = led2Neg;
 
   EVNT_SetEvent(EVNT_STARTUP); /* set startup event */
   /*! \todo Create tasks here */

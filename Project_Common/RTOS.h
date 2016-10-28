@@ -11,6 +11,15 @@
 
 #include "Platform.h"
 #if PL_CONFIG_HAS_RTOS
+
+void led1Neg(void);
+void led2Neg(void);
+
+typedef struct {
+	unsigned short blinkFrequency;
+	void (*callbackFunct)(void);
+} led_t;
+
 /*! \brief Initializes the RTOS module */
 void RTOS_Init(void);
 
