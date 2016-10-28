@@ -35,7 +35,11 @@ static void AppTask(void* param) {
     //}
 	led->callbackFunct();
     /* \todo handle your application code here */
+<<<<<<< HEAD
     FRTOS1_vTaskDelay(pdMS_TO_TICKS(led->blinkFrequency));
+=======
+    FRTOS1_vTaskDelay(pdMS_TO_TICKS(500));
+>>>>>>> 794dc1b1e52052342b817c01c1a393191b8f6a74
   }
 }
 

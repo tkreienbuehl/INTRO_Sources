@@ -30,6 +30,8 @@
 /* Including needed modules to compile this module/procedure */
 #include "Cpu.h"
 #include "Events.h"
+#include "FRTOS1.h"
+#include "RTOSCNTRLDD1.h"
 #include "LEDPin1.h"
 #include "BitIoLdd17.h"
 #include "SW1.h"
@@ -62,6 +64,7 @@
 #include "AS1.h"
 #include "ASerialLdd1.h"
 #include "RTT1.h"
+#include "SYS1.h"
 /* Including shared modules, which are used for whole project */
 #include "PE_Types.h"
 #include "PE_Error.h"
