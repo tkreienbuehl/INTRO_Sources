@@ -11,11 +11,20 @@
 
 #include "Platform.h"
 #if PL_CONFIG_HAS_SHELL
+#include "CLS1.h"
+
+void SHELL_SendChar(uint8_t ch);
+
 /*!
  * \brief Parse a command string
  * \param cmd Zero terminated command to be parsed
  */
 void SHELL_ParseCmd(unsigned char *cmd);
+
+/*!
+ * \brief Returns the default IO-Type
+ */
+CLS1_ConstStdIOType* SHELL_GetStdio(void);
 
 /*!
  * \brief Sends a string to the shell/console stdout
