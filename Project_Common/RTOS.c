@@ -22,24 +22,13 @@ void led2Neg(void) {
 }
 
 static void AppTask(void* param) {
-  //const int *whichLED = (int*)param;
 
   const led_t* led = (led_t*)param;
 
   (void)param; /* avoid compiler warning */
   for(;;) {
-    //if (led->wichLed==1) {
-      //LED1_Neg();
-    //} else if (led->wichLed==2) {
-      //LED2_Neg();
-    //}
 	led->callbackFunct();
-    /* \todo handle your application code here */
-<<<<<<< HEAD
     FRTOS1_vTaskDelay(pdMS_TO_TICKS(led->blinkFrequency));
-=======
-    FRTOS1_vTaskDelay(pdMS_TO_TICKS(500));
->>>>>>> 794dc1b1e52052342b817c01c1a393191b8f6a74
   }
 }
 
