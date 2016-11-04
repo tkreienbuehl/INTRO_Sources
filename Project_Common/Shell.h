@@ -12,6 +12,9 @@
 #include "Platform.h"
 #if PL_CONFIG_HAS_SHELL
 #include "CLS1.h"
+#if PL_CONFIG_HAS_USB_CDC
+#include "CDC1.h"
+#endif
 
 void SHELL_SendChar(uint8_t ch);
 

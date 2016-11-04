@@ -3,7 +3,7 @@
   <Header>
     <Name>Project_Hoerbi_III</Name>
     <SavedBy>Erich Styger</SavedBy>
-    <ModificationStamp>116</ModificationStamp>
+    <ModificationStamp>118</ModificationStamp>
     <Date>2016-02-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>372</ProjectCompNumb>
+    <ProjectCompNumb>382</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>
@@ -10537,7 +10537,7 @@
       <ItemId45>260</ItemId45>
       <Value45>true</Value45>
       <ItemId46>270</ItemId46>
-      <Value46>false</Value46>
+      <Value46>true</Value46>
       <ItemId47>276</ItemId47>
       <Value47>false</Value47>
     </BoolList_BeanConfig>
@@ -27827,8 +27827,8 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Value>false</Value>
-        <Expanded>false</Expanded>
+        <Value>true</Value>
+        <Expanded>true</Expanded>
       </ItemState>
       <ItemState>
         <ItemSymbol>ShellMaxNofTasks</ItemSymbol>
@@ -29205,10 +29205,10 @@
         <ReadOnly>true</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>1</Index>
-        <Value>false</Value>
+        <Index>0</Index>
+        <Value>true</Value>
         <LastSelection>true</LastSelection>
-        <LastUserSel>never</LastUserSel>
+        <LastUserSel>always</LastUserSel>
         <UsrMethodName>ParseCommand</UsrMethodName>
       </ItemState>
       <ItemState>
@@ -54797,7 +54797,7 @@
     <BeanType>FSL_USB_Stack</BeanType>
     <Name>USB1</Name>
     <CompNumb>270</CompNumb>
-    <CompEnabled>false</CompEnabled>
+    <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
     <IconName>FSL_USB_Stack</IconName>
     <UserFolderName />
@@ -54876,8 +54876,8 @@
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
               <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-              <Index>18</Index>
-              <EnumSymbVal>Kinetis K24FN120</EnumSymbVal>
+              <Index>16</Index>
+              <EnumSymbVal>Kinetis K22F120</EnumSymbVal>
             </ItemState>
             <ItemState>
               <ItemSymbol>USBCDCenabled</ItemSymbol>
@@ -55608,8 +55608,8 @@
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
               <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-              <Value>true</Value>
-              <Expanded>true</Expanded>
+              <Value>false</Value>
+              <Expanded>false</Expanded>
             </ItemState>
             <ItemState>
               <ItemSymbol>Timeout</ItemSymbol>
@@ -56077,8 +56077,7 @@
               <UserReadOnly>false</UserReadOnly>
               <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
               <Index>1</Index>
-              <EnumSymbVal />
-              <Value />
+              <EnumSymbVal>enabled</EnumSymbVal>
             </ItemState>
             <ItemState>
               <ItemSymbol>ClockSettingGrp</ItemSymbol>
@@ -56157,7 +56156,7 @@
               <ItemSymbol>DividerClockGrp</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Expanded>true</Expanded>
+              <Expanded>false</Expanded>
             </ItemState>
             <ItemState>
               <ItemSymbol>DividerClockSource</ItemSymbol>
@@ -56165,8 +56164,7 @@
               <UserReadOnly>false</UserReadOnly>
               <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
               <Index>0</Index>
-              <EnumSymbVal />
-              <Value />
+              <EnumSymbVal>pllfllClk</EnumSymbVal>
             </ItemState>
             <ItemState>
               <ItemSymbol>DividerInputFreq</ItemSymbol>
@@ -56196,8 +56194,7 @@
               <UserReadOnly>false</UserReadOnly>
               <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
               <Index>0</Index>
-              <EnumSymbVal />
-              <Value />
+              <EnumSymbVal>dividedClk</EnumSymbVal>
             </ItemState>
             <ItemState>
               <ItemSymbol>ModuleClockFreq</ItemSymbol>
@@ -56207,7 +56204,7 @@
               <ItemSymbol>PullUpDownGrp</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Expanded>true</Expanded>
+              <Expanded>false</Expanded>
             </ItemState>
             <ItemState>
               <ItemSymbol>WeakPullDowns</ItemSymbol>
@@ -57133,7 +57130,7 @@
               <ItemSymbol>PinsGrp_USB</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Expanded>false</Expanded>
+              <Expanded>true</Expanded>
             </ItemState>
             <ItemState>
               <ItemSymbol>PinGrp_USB_ALT_CLK</ItemSymbol>
@@ -57202,7 +57199,7 @@
               <ItemSymbol>Pin_USB_DPSignal</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value />
+              <Value>USB_DP</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>PinG_USB_DM</ItemSymbol>
@@ -57223,7 +57220,7 @@
               <ItemSymbol>Pin_USB_DMSignal</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value />
+              <Value>USB_DM</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>InterruptsGrp</ItemSymbol>
@@ -57239,7 +57236,7 @@
             </ItemState>
             <ItemState>
               <ItemSymbol>InterruptVector_OTG_ID_CHG</ItemSymbol>
-              <Value />
+              <Value>INT_USB0</Value>
             </ItemState>
             <ItemState>
               <ItemSymbol>InterruptVector_OTG_ID_CHGRequestFeatureGroup</ItemSymbol>
@@ -57265,9 +57262,8 @@
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
               <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-              <Index>2</Index>
-              <EnumSymbVal />
-              <Value />
+              <Index>6</Index>
+              <EnumSymbVal>6</EnumSymbVal>
             </ItemState>
             <ItemState>
               <ItemSymbol>InterruptVector_OTG_ID_CHGPExPriorityFeatureGroup</ItemSymbol>
@@ -57607,8 +57603,8 @@
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
         <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-        <Index>1</Index>
-        <Value>false</Value>
+        <Index>0</Index>
+        <Value>true</Value>
       </ItemState>
     </Properties>
     <Methods>
