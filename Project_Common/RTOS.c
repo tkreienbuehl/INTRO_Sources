@@ -12,6 +12,7 @@
 #include "Event.h"
 #include "Keys.h"
 #include "Application.h"
+#include "Shell.h"
 
 void led1Neg(void) {
 	LED1_Neg();
@@ -24,7 +25,6 @@ void led2Neg(void) {
 static void AppTask(void* param) {
 
   const led_t* led = (led_t*)param;
-
   (void)param; /* avoid compiler warning */
   for(;;) {
 	led->callbackFunct();
@@ -47,9 +47,11 @@ void RTOS_Init(void) {
   if (FRTOS1_xTaskCreate(AppTask, (signed portCHAR *)"App1", configMINIMAL_STACK_SIZE, (void*)&led1, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){} /* error case only, stay here! */
   }
+  //SHELL_SendString((uint8_t*)"AppTask for LED 1 created");
   if (FRTOS1_xTaskCreate(AppTask, (signed portCHAR *)"App2", configMINIMAL_STACK_SIZE, (void*)&led2, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){}
   }
+  //SHELL_SendString((uint8_t*)"AppTask for LED 2 created");
 }
 
 void RTOS_Deinit(void) {

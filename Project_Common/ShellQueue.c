@@ -34,7 +34,7 @@ void SQUEUE_SendString(const unsigned char *str) {
   unsigned char *ptr;
   size_t bufSize;
 
-  bufSize = UTIL1_strlen(str)+1;
+  bufSize = UTIL1_strlen((char_t*)str)+1;
   ptr = FRTOS1_pvPortMalloc(bufSize);
   UTIL1_strcpy(ptr, bufSize, str);
   if (FRTOS1_xQueueSendToBack(SQUEUE_Queue, &ptr, portMAX_DELAY)!=pdPASS) {

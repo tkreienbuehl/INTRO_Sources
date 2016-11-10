@@ -272,6 +272,7 @@ void SHELL_ParseCmd(unsigned char *cmd) {
     (void)CLS1_ParseWithCommandTable(cmd, CLS1_GetStdio(), CmdParserTable);
   #endif
 }
+
 #if PL_CONFIG_HAS_RTOS
 static void ShellTask(void *pvParameters) {
 #if SHELL_HANDLER_ARRAY

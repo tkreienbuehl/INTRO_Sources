@@ -56,7 +56,7 @@ void APP_EventHandler(EVNT_Handle event) {
   case EVNT_SW1_PRESSED:
     LED2_Neg();
     //CLS1_SendStr((const uint8*)"SW1 pressed\r\n", CLS1_GetStdio()->stdOut);
-    SHELL_SendString("SW1 pressed\r\n");
+    SHELL_SendString((uint8_t*)"SW1 pressed\r\n");
     #if PL_CONFIG_HAS_BUZZER
     BUZ_PlayTune(BUZ_TUNE_BUTTON);
     #endif

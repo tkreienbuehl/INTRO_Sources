@@ -61,6 +61,15 @@ static const BUZ_Tune MelodyButtonLong[] =
     {250,200},
 };
 
+static const BUZ_Tune MelodyHappy[] =
+{
+	{999, 200},
+	{0,50},
+	{520, 400},
+	{0,50},
+	{400, 100},
+};
+
 typedef struct {
   int idx; /* current index */
   int maxIdx; /* maximum index */
@@ -72,6 +81,7 @@ static MelodyDesc BUZ_Melodies[] = {
   {0, sizeof(MelodyWelcome)/sizeof(MelodyWelcome[0]),         0, 0, MelodyWelcome}, /* BUZ_TUNE_WELCOME */
   {0, sizeof(MelodyButton)/sizeof(MelodyButton[0]),           0, 0, MelodyButton}, /* BUZ_TUNE_BUTTON */
   {0, sizeof(MelodyButtonLong)/sizeof(MelodyButtonLong[0]),   0, 0, MelodyButtonLong}, /* BUZ_TUNE_BUTTON_LONG */
+  {0, sizeof(MelodyHappy)/sizeof(MelodyHappy[0]),   		  0, 0, MelodyHappy}, /* BUZ_TUNE_HAPPY */
 };
 
 static void BUZ_Toggle(void *dataPtr) {
