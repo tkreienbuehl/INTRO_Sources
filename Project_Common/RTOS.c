@@ -44,11 +44,11 @@ void RTOS_Init(void) {
 
   EVNT_SetEvent(EVNT_STARTUP); /* set startup event */
   /*! \todo Create tasks here */
-  if (FRTOS1_xTaskCreate(AppTask, (signed portCHAR *)"App1", configMINIMAL_STACK_SIZE, (void*)&led1, tskIDLE_PRIORITY, NULL) != pdPASS) {
+  if (FRTOS1_xTaskCreate(AppTask, (portCHAR*)"App1", configMINIMAL_STACK_SIZE, (void*)&led1, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){} /* error case only, stay here! */
   }
   //SHELL_SendString((uint8_t*)"AppTask for LED 1 created");
-  if (FRTOS1_xTaskCreate(AppTask, (signed portCHAR *)"App2", configMINIMAL_STACK_SIZE, (void*)&led2, tskIDLE_PRIORITY, NULL) != pdPASS) {
+  if (FRTOS1_xTaskCreate(AppTask, (portCHAR*)"App2", configMINIMAL_STACK_SIZE, (void*)&led2, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){}
   }
   //SHELL_SendString((uint8_t*)"AppTask for LED 2 created");

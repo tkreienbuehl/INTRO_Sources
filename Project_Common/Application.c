@@ -126,6 +126,9 @@ void APP_Start(void) {
 #if CLS1_DEFAULT_SERIAL
   CLS1_SendStr((const uint8_t*)"Hello World!\r\n", CLS1_GetStdio()->stdOut);
 #endif
+#if PL_CONFIG_HAS_SHELL_QUEUE
+  SHELL_SendString((uint8_t*)"Welcome!");
+#endif
 #if PL_CONFIG_HAS_KEYS
     KEY_Init();
 #endif
