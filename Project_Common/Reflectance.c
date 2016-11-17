@@ -52,6 +52,8 @@ static volatile RefStateType refState = REF_STATE_INIT; /* state machine state *
 
 static LDD_TDeviceData *timerHandle;
 
+xSemaphoreHandle REF_Mutex = NULL;
+
 typedef struct SensorFctType_ {
   void (*SetOutput)(void);
   void (*SetInput)(void);
@@ -140,36 +142,38 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
   uint8_t cnt; /* number of sensor */
   uint8_t i;
   RefCnt_TValueType timerVal;
-  /*! \todo Consider reentrancy and mutual exclusion! */
 
-  //SR todo: add mutex
-  LED_IR_On(); /* IR LED's on */
-  WAIT1_Waitus(200);
-  for(i=0;i<REF_NOF_SENSORS;i++) {
-    SensorFctArray[i].SetOutput(); /* turn I/O line as output */
-    SensorFctArray[i].SetVal(); /* put high */
-    raw[i] = MAX_SENSOR_VALUE;			//SR todo:change value from ffff to lower value
-  }
-  WAIT1_Waitus(50); /* give at least 10 us to charge the capacitor */
-  //SR: Todo: add critical section
-  for(i=0;i<REF_NOF_SENSORS;i++) {
-    SensorFctArray[i].SetInput(); /* turn I/O line as input */
-  }
-  (void)RefCnt_ResetCounter(timerHandle); /* reset timer counter */
-  do {
-    timerVal = RefCnt_GetCounterValue(timerHandle);
-    cnt = 0;
-    for(i=0;i<REF_NOF_SENSORS;i++) {
-      if (raw[i]==MAX_SENSOR_VALUE) { /* not measured yet? */
-        if (SensorFctArray[i].GetVal()==0) {
-          raw[i] = timerVal;
-        }
-      } else { /* have value */
-        cnt++;
-      }
-    }
-  } while(cnt!=REF_NOF_SENSORS && timerVal<MAX_SENSOR_VALUE);
-  LED_IR_Off(); /* IR LED's off */
+	if (xSemaphoreTake(REF_Mutex, portMAX_DELAY) == pdPASS) {
+	  LED_IR_On(); /* IR LED's on */
+	  WAIT1_Waitus(200);
+	  for(i=0;i<REF_NOF_SENSORS;i++) {
+		SensorFctArray[i].SetOutput(); /* turn I/O line as output */
+		SensorFctArray[i].SetVal(); /* put high */
+		raw[i] = MAX_SENSOR_VALUE;			//SR todo:change value from ffff to lower value
+	  }
+	  WAIT1_Waitus(50); /* give at least 10 us to charge the capacitor */
+	  FRTOS1_taskENTER_CRITICAL();
+	  for(i=0;i<REF_NOF_SENSORS;i++) {
+		SensorFctArray[i].SetInput(); /* turn I/O line as input */
+	  }
+	  (void)RefCnt_ResetCounter(timerHandle); /* reset timer counter */
+	  do {
+		timerVal = RefCnt_GetCounterValue(timerHandle);
+		cnt = 0;
+		for(i=0;i<REF_NOF_SENSORS;i++) {
+		  if (raw[i]==MAX_SENSOR_VALUE) { /* not measured yet? */
+			if (SensorFctArray[i].GetVal()==0) {
+			  raw[i] = timerVal;
+			}
+		  } else { /* have value */
+			cnt++;
+		  }
+		}
+	  } while(cnt!=REF_NOF_SENSORS && timerVal<MAX_SENSOR_VALUE);
+	  FRTOS1_taskEXIT_CRITICAL();
+	  LED_IR_Off(); /* IR LED's off */
+	  xSemaphoreGive(REF_Mutex);
+	}
 }
 
 static void REF_CalibrateMinMax(SensorTimeType min[REF_NOF_SENSORS], SensorTimeType max[REF_NOF_SENSORS], SensorTimeType raw[REF_NOF_SENSORS]) {
@@ -594,6 +598,10 @@ void REF_Init(void) {
 #endif
   refState = REF_STATE_INIT;
   timerHandle = RefCnt_Init(NULL);
+  REF_Mutex = xSemaphoreCreateMutex();
+  if (REF_Mutex == NULL) {
+	  for (;;) {};	// ERROR
+  }
   /*! \todo You might need to adjust priority or other task settings */
   if (FRTOS1_xTaskCreate(ReflTask, "Refl", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
     for(;;){} /* error */
