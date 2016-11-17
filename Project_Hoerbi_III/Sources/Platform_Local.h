@@ -54,7 +54,7 @@
 #define PL_LOCAL_CONFIG_HAS_LCD_MENU_DISABLED             /* disable LCD menu */
 
 /* robot hardware functionality */
-#define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */
+//#define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */
 //#define PL_LOCAL_CONFIG_HAS_REFLECTANCE_DISABLED          /* disable IR reflectance sensor */
 #define PL_LOCAL_CONFIG_HAS_QUADRATURE_DISABLED           /* disable quadrature encoder */
 #define PL_LOCAL_CONFIG_HAS_MOTOR_TACHO_DISABLED          /* disable tacho */
@@ -67,5 +67,9 @@
 #define PL_LOCAL_CONFIG_HAS_LINE_MAZE_DISABLED            /* disable maze solving */
 #define PL_LOCAL_CONFIG_HAS_BLUETOOTH_DISABLED            /* disable Bluetooth */
 //#define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
+
+/* individual settings */
+#define MOTOR_L_INVERTET FALSE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
+#define MOTOR_R_INVERTED TRUE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */

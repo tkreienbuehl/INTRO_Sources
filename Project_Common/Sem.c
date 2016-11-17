@@ -36,7 +36,7 @@ static void vSlaveTask(void *pvParameters) {
     /*! \todo Implement functionality */
 	static int counter=0;
 	if (xSemaphoreTake(sem, portMAX_DELAY) == pdPASS) {
-		BUZ_PlayTune(BUZ_TUNE_HAPPY);
+		//BUZ_PlayTune(BUZ_TUNE_HAPPY);
 		  counter++;
 	}
   }
