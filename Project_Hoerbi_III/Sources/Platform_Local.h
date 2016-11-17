@@ -69,7 +69,7 @@
 //#define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
 
 /* individual settings */
-#define MOTOR_L_INVERTET FALSE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
+#define MOTOR_L_INVERTED FALSE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
 #define MOTOR_R_INVERTED TRUE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
