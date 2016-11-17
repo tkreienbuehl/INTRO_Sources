@@ -54,9 +54,9 @@
 #define PL_LOCAL_CONFIG_HAS_LCD_MENU_DISABLED             /* disable LCD menu */
 
 /* robot hardware functionality */
-#define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */
+//#define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */
 //#define PL_LOCAL_CONFIG_HAS_REFLECTANCE_DISABLED          /* disable IR reflectance sensor */
-#define PL_LOCAL_CONFIG_HAS_QUADRATURE_DISABLED           /* disable quadrature encoder */
+//#define PL_LOCAL_CONFIG_HAS_QUADRATURE_DISABLED           /* disable quadrature encoder */
 #define PL_LOCAL_CONFIG_HAS_MOTOR_TACHO_DISABLED          /* disable tacho */
 #define PL_LOCAL_CONFIG_HAS_MPC4728_DISABLED              /* disable MPC4728 (only for V1 robot) */
 #define PL_LOCAL_CONFIG_HAS_QUAD_CALIBRATION_DISABLED     /* disable quadrature calibration (only for V1 robot) */
@@ -67,6 +67,11 @@
 #define PL_LOCAL_CONFIG_HAS_LINE_MAZE_DISABLED            /* disable maze solving */
 #define PL_LOCAL_CONFIG_HAS_BLUETOOTH_DISABLED            /* disable Bluetooth */
 //#define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
+
+//Individual section!
+//defined
+#define MOTOR_L_INVERTED (true)		//check MOTOR_HAS_INVERT (needs to be true for this)
+#define MOTOR_R_INVERTED (false)	//check MOTOR_HAS_INVERT (needs to be true for this)
 
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
