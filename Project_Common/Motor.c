@@ -34,12 +34,10 @@ static uint8_t PWMRSetRatio16(uint16_t ratio) {
 }
 
 static void DirLPutVal(bool val) {
-  /*! \todo Check if directions are working properly with your hardware */
   DIRL_PutVal(val);
 }
 
 static void DirRPutVal(bool val) {
-  /*! \todo Check if directions are working properly with your hardware */
   DIRR_PutVal(val);
 }
 
@@ -97,7 +95,8 @@ void MOT_ChangeSpeedPercent(MOT_MotorDevice *motor, MOT_SpeedPercent relPercent)
 }
 
 void MOT_SetDirection(MOT_MotorDevice *motor, MOT_Direction dir) {
-  if (dir==MOT_DIR_FORWARD ) {
+  if (dir==MOT_DIR_FORWARD && motor->currDir!=MOT_DIR_FORWARD) {
+	  motor->currDir = dir;
 #if MOTOR_HAS_INVERT
     motor->DirPutVal(motor->inverted?0:1);
 #else
@@ -106,7 +105,8 @@ void MOT_SetDirection(MOT_MotorDevice *motor, MOT_Direction dir) {
     if (motor->currSpeedPercent<0) {
       motor->currSpeedPercent = -motor->currSpeedPercent;
     }
-  } else if (dir==MOT_DIR_BACKWARD) {
+  } else if (dir==MOT_DIR_BACKWARD && motor->currDir!=MOT_DIR_BACKWARD) {
+	  motor->currDir = dir;
 #if MOTOR_HAS_INVERT
     motor->DirPutVal(motor->inverted?1:0);
 #else
@@ -217,6 +217,8 @@ void MOT_Init(void) {
   motorR.DirPutVal = DirRPutVal;
   motorL.SetRatio16 = PWMLSetRatio16;
   motorR.SetRatio16 = PWMRSetRatio16;
+  motorR.currDir = MOT_DIR_UNKNOWN;
+  motorL.currDir = MOT_DIR_UNKNOWN;
   MOT_SetSpeedPercent(&motorL, 0);
   MOT_SetSpeedPercent(&motorR, 0);
   (void)PWML_Enable();

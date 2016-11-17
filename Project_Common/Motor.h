@@ -16,7 +16,8 @@
 
 typedef enum {
   MOT_DIR_FORWARD,  /*!< Motor forward direction */
-  MOT_DIR_BACKWARD  /*!< Motor backward direction */
+  MOT_DIR_BACKWARD,  /*!< Motor backward direction */
+  MOT_DIR_UNKNOWN	/*!< Motor direction not defined */
 } MOT_Direction;
 
 typedef int8_t MOT_SpeedPercent; /*!< -100%...+100%, where negative is backward */
@@ -29,6 +30,7 @@ typedef struct MOT_MotorDevice_ {
   uint16_t currPWMvalue; /*!< current PWM value used */
   uint8_t (*SetRatio16)(uint16_t); /*!< function to set the ratio */
   void (*DirPutVal)(bool); /*!< function to set direction bit */
+  MOT_Direction currDir;	/* Current direction Set */
 } MOT_MotorDevice;
 
 typedef enum {
