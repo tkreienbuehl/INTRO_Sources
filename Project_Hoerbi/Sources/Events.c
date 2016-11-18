@@ -30,6 +30,11 @@
 #include "Events.h"
 #include "Timer.h"
 
+#ifdef PL_CONFIG_HAS_QUADRATURE
+#include "Q4CLeft.h"
+#include "Q4CRight.h"
+#endif
+
 #ifdef __cplusplus
 extern "C" {
 #endif 
@@ -179,7 +184,8 @@ void FRTOS1_vApplicationIdleHook(void)
 */
 void QuadInt_OnInterrupt(void)
 {
-  /* Write your code here ... */
+  Q4CLeft_Sample();
+  Q4CRight_Sample();
 }
 
 /* END Events */

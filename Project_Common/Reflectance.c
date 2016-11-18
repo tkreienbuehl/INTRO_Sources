@@ -62,7 +62,7 @@ typedef struct SensorFctType_ {
 } SensorFctType;
 
 typedef uint16_t SensorTimeType;
-#define MAX_SENSOR_VALUE  ((SensorTimeType)-1)
+#define MAX_SENSOR_VALUE  (0xC000)
 
 /* calibration min/max values */
 typedef struct SensorCalibT_ {
