@@ -62,7 +62,7 @@ typedef struct SensorFctType_ {
 } SensorFctType;
 
 typedef uint16_t SensorTimeType;
-#define MAX_SENSOR_VALUE  (0xC000)
+#define MAX_SENSOR_VALUE  (0xA000)
 
 /* calibration min/max values */
 typedef struct SensorCalibT_ {
@@ -142,7 +142,6 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
   uint8_t cnt; /* number of sensor */
   uint8_t i;
   RefCnt_TValueType timerVal;
-  CS1_CriticalVariable()
 
 	if (xSemaphoreTake(REF_Mutex, portMAX_DELAY) == pdPASS) {
 	  LED_IR_On(); /* IR LED's on */
@@ -153,7 +152,7 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
 		raw[i] = MAX_SENSOR_VALUE;			//SR todo:change value from ffff to lower value
 	  }
 	  WAIT1_Waitus(50); /* give at least 10 us to charge the capacitor */
-	  CS1_EnterCritical();
+	  FRTOS1_taskENTER_CRITICAL();
 	  for(i=0;i<REF_NOF_SENSORS;i++) {
 		SensorFctArray[i].SetInput(); /* turn I/O line as input */
 	  }
@@ -171,7 +170,7 @@ static void REF_MeasureRaw(SensorTimeType raw[REF_NOF_SENSORS]) {
 		  }
 		}
 	  } while(cnt!=REF_NOF_SENSORS && timerVal<MAX_SENSOR_VALUE);
-	  CS1_ExitCritical();
+	  FRTOS1_taskEXIT_CRITICAL();
 	  LED_IR_Off(); /* IR LED's off */
 	  xSemaphoreGive(REF_Mutex);
 	}
