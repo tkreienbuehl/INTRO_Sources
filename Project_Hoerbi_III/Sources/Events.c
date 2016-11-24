@@ -29,6 +29,13 @@
 #include "Cpu.h"
 #include "Events.h"
 #include "Timer.h"
+#if PL_CONFIG_HAS_QUADRATURE
+	#include "Q4CLeft.h"
+	#include "Q4CRight.h"
+#endif
+#if PL_CONFIG_HAS_MOTOR_TACHO
+	#include "Tacho.h"
+#endif
 
 #ifdef __cplusplus
 extern "C" {
@@ -142,6 +149,15 @@ void FRTOS1_vApplicationTickHook(void)
 {
   /* Called for every RTOS tick. */
   /* Write your code here ... */
+#if PL_CONFIG_HAS_MOTOR_TACHO
+	  static int cnt = 0;
+	  /* get called from the RTOS tick counter. Divide the frequency. */
+	  cnt += TMR_TICK_MS;
+	  if (cnt >= TACHO_SAMPLE_PERIOD_MS) {
+		  TACHO_Sample();
+		  cnt = 0;
+	  }
+#endif
 }
 
 /*
@@ -180,6 +196,8 @@ void FRTOS1_vApplicationIdleHook(void)
 void QuadInt_OnInterrupt(void)
 {
   /* Write your code here ... */
+	Q4CLeft_Sample();
+	Q4CRight_Sample();
 }
 
 /* END Events */

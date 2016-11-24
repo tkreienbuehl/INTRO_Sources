@@ -22,6 +22,9 @@ int32_t TACHO_GetSpeed(bool isLeft);
  */
 void TACHO_CalcSpeed(void);
 
+#define TACHO_SAMPLE_PERIOD_MS (1)
+  /*!< \todo speed sample period in ms. Make sure that speed is sampled at the given rate. */
+
 /*!
  * \brief Sampling routine to calculate speed, must be called periodically with a fixed frequency.
  */
