@@ -3,7 +3,7 @@
   <Header>
     <Name>Project_Hoerbi_III</Name>
     <SavedBy>Erich Styger</SavedBy>
-    <ModificationStamp>131</ModificationStamp>
+    <ModificationStamp>134</ModificationStamp>
     <Date>2016-02-29</Date>
     <IDE>Eclipse IDE</IDE>
     <PEversion>1.12.2.RT7_b1550-0615</PEversion>
@@ -29,7 +29,7 @@
     <UseExistingModules>true</UseExistingModules>
     <RenamePeripheries>false</RenamePeripheries>
     <Autodependency>true</Autodependency>
-    <ProjectCompNumb>433</ProjectCompNumb>
+    <ProjectCompNumb>438</ProjectCompNumb>
     <DelUnusedPreviouslyGenFiles>true</DelUnusedPreviouslyGenFiles>
     <GeneratedCodeFrozen>false</GeneratedCodeFrozen>
     <AssignInitComponentNameToPrph>true</AssignInitComponentNameToPrph>
@@ -10476,7 +10476,7 @@
       <ItemId10>24</ItemId10>
       <Value10>false</Value10>
       <ItemId11>27</ItemId11>
-      <Value11>false</Value11>
+      <Value11>true</Value11>
       <ItemId12>30</ItemId12>
       <Value12>true</Value12>
       <ItemId13>31</ItemId13>
@@ -10530,7 +10530,7 @@
       <ItemId37>98</ItemId37>
       <Value37>true</Value37>
       <ItemId38>124</ItemId38>
-      <Value38>true</Value38>
+      <Value38>false</Value38>
       <ItemId39>174</ItemId39>
       <Value39>false</Value39>
       <ItemId40>190</ItemId40>
@@ -13552,7 +13552,7 @@
     <BeanType>AsynchroSerial</BeanType>
     <Name>AS1</Name>
     <CompNumb>124</CompNumb>
-    <CompEnabled>true</CompEnabled>
+    <CompEnabled>false</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
     <IconName>PHONE</IconName>
     <UserFolderName>V2</UserFolderName>
@@ -14660,7 +14660,7 @@
               <ItemSymbol>BdRate</ItemSymbol>
               <ReadOnly>false</ReadOnly>
               <UserReadOnly>false</UserReadOnly>
-              <Value>init:38400 baud;prec:1.5%;RTS:none;clksrc_presc[SpeedMode0]Auto select;clksrc_presc[SpeedMode1]Auto select;clksrc_presc[SpeedMode2]Auto select;clksrc_presc[SpeedMode3]Auto select;clksrc_presc[SpeedMode4]Auto select;clksrc_presc[SpeedMode5]Auto select;clksrc_presc[SpeedMode6]Auto select;clksrc_presc[SpeedMode7]Auto select</Value>
+              <Value>38400 baud</Value>
               <RuntimeSetting>0</RuntimeSetting>
               <ReqDevPrescHigh>-1</ReqDevPrescHigh>
               <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -16582,7 +16582,7 @@
         <ItemSymbol>Serial</ItemSymbol>
         <ReadOnly>false</ReadOnly>
         <UserReadOnly>false</UserReadOnly>
-        <Value>AS1</Value>
+        <Value>BT1</Value>
       </ItemState>
       <ItemState>
         <ItemSymbol>ConsoleSempahore</ItemSymbol>
@@ -17041,7 +17041,7 @@
     <BeanType>Bluetooth_EGBT</BeanType>
     <Name>BT1</Name>
     <CompNumb>27</CompNumb>
-    <CompEnabled>false</CompEnabled>
+    <CompEnabled>true</CompEnabled>
     <GenCodeMode>ALWAYS_WRITE</GenCodeMode>
     <IconName>Bluetooth_EGBT</IconName>
     <UserFolderName>V2</UserFolderName>
@@ -17658,6 +17658,8 @@
               <List lines_count="0" />
               <UnitText>baud</UnitText>
               <MinCounterTicks>0</MinCounterTicks>
+              <ControlledTimingCfgFromPropertySymbol>BdRate</ControlledTimingCfgFromPropertySymbol>
+              <ControlledTimingCfgFromComponentRef>Serial_LDD</ControlledTimingCfgFromComponentRef>
             </ItemState>
             <ItemState>
               <ItemSymbol>SerBreak</ItemSymbol>
@@ -18230,7 +18232,7 @@
                     <ItemSymbol>BdRate</ItemSymbol>
                     <ReadOnly>false</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
-                    <Value>9600 baud</Value>
+                    <Value>init:9600 baud;prec:1.5%;RTS:none;clksrc_presc[SpeedMode0]Auto select;clksrc_presc[SpeedMode1]Auto select;clksrc_presc[SpeedMode2]Auto select;clksrc_presc[SpeedMode3]Auto select;clksrc_presc[SpeedMode4]Auto select;clksrc_presc[SpeedMode5]Auto select;clksrc_presc[SpeedMode6]Auto select;clksrc_presc[SpeedMode7]Auto select</Value>
                     <RuntimeSetting>0</RuntimeSetting>
                     <ReqDevPrescHigh>-1</ReqDevPrescHigh>
                     <ReqDevPrescLow>-1</ReqDevPrescLow>
@@ -19121,8 +19123,8 @@
                     <ReadOnly>true</ReadOnly>
                     <UserReadOnly>false</UserReadOnly>
                     <PropertyModelIsAutomatic>false</PropertyModelIsAutomatic>
-                    <Value>true</Value>
-                    <Expanded>true</Expanded>
+                    <Value>false</Value>
+                    <Expanded>false</Expanded>
                     <LastSelection>false</LastSelection>
                     <LastUserSel>no</LastUserSel>
                   </ItemState>
