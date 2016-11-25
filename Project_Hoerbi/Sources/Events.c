@@ -30,6 +30,10 @@
 #include "Events.h"
 #include "Timer.h"
 
+#if PL_CONFIG_HAS_MOTOR_TACHO
+#include "Tacho.h"
+#endif
+
 #ifdef PL_CONFIG_HAS_QUADRATURE
 #include "Q4CLeft.h"
 #include "Q4CRight.h"
@@ -146,7 +150,14 @@ void FRTOS1_vApplicationStackOverflowHook(TaskHandle_t pxTask, char *pcTaskName)
 void FRTOS1_vApplicationTickHook(void)
 {
   /* Called for every RTOS tick. */
-  /* Write your code here ... */
+#if PL_CONFIG_HAS_MOTOR_TACHO
+	  static int cnt = 0;
+	  cnt += TMR_TICK_MS;
+	  if (cnt >= TACHO_SAMPLE_PERIOD_MS) {
+		 cnt = 0; /* reset counter */
+		 TACHO_Sample();
+	  }
+#endif
 }
 
 /*

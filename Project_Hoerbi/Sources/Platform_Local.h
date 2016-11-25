@@ -57,21 +57,43 @@
 //#define PL_LOCAL_CONFIG_HAS_MOTOR_DISABLED                /* disable motor */
 //#define PL_LOCAL_CONFIG_HAS_REFLECTANCE_DISABLED          /* disable IR reflectance sensor */
 //#define PL_LOCAL_CONFIG_HAS_QUADRATURE_DISABLED           /* disable quadrature encoder */
-#define PL_LOCAL_CONFIG_HAS_MOTOR_TACHO_DISABLED          /* disable tacho */
+//#define PL_LOCAL_CONFIG_HAS_MOTOR_TACHO_DISABLED          /* disable tacho */
 #define PL_LOCAL_CONFIG_HAS_MPC4728_DISABLED              /* disable MPC4728 (only for V1 robot) */
 #define PL_LOCAL_CONFIG_HAS_QUAD_CALIBRATION_DISABLED     /* disable quadrature calibration (only for V1 robot) */
-#define PL_LOCAL_CONFIG_HAS_PID_DISABLED                  /* disable PID */
-#define PL_LOCAL_CONFIG_HAS_DRIVE_DISABLED                /* disable drive module */
+//#define PL_LOCAL_CONFIG_HAS_PID_DISABLED                  /* disable PID */
+//#define PL_LOCAL_CONFIG_HAS_DRIVE_DISABLED                /* disable drive module */
 #define PL_LOCAL_CONFIG_HAS_TURN_DISABLED                 /* disable turning module */
-#define PL_LOCAL_CONFIG_HAS_LINE_FOLLOW_DISABLED          /* disable line following */
+//#define PL_LOCAL_CONFIG_HAS_LINE_FOLLOW_DISABLED          /* disable line following */
 #define PL_LOCAL_CONFIG_HAS_LINE_MAZE_DISABLED            /* disable maze solving */
-#define PL_LOCAL_CONFIG_HAS_BLUETOOTH_DISABLED            /* disable Bluetooth */
+//#define PL_LOCAL_CONFIG_HAS_BLUETOOTH_DISABLED            /* disable Bluetooth */
 //#define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
 
 //Individual section!
 //defined
-#define MOTOR_L_INVERTED (true)		//check MOTOR_HAS_INVERT (needs to be true for this)
-#define MOTOR_R_INVERTED (false)	//check MOTOR_HAS_INVERT (needs to be true for this)
+#define PL_MOTOR_L_INVERTED (true)		//check MOTOR_HAS_INVERT (needs to be true for this)
+#define PL_MOTOR_R_INVERTED (false)	//check MOTOR_HAS_INVERT (needs to be true for this)
 
+/* PID Values */
+#define PL_SPEED_LEFT_P_FACTOR100         2000				  /* P-PART */
+#define PL_SPEED_LEFT_I_FACTOR100          200               /* I-PART */
+#define PL_SPEED_LEFT_D_FACTOR100            0               /* D-PART */
+#define PL_SPEED_LEFT_I_ANTI_WINDUP      40000               /* Anti windup for I*/
+
+#define PL_SPEED_RIGHT_P_FACTOR100        2800
+#define PL_SPEED_RIGHT_I_FACTOR100         150
+#define PL_SPEED_RIGHT_D_FACTOR100           0
+#define PL_SPEED_RIGHT_I_ANTI_WINDUP     50000
+
+#define PL_LINE_FOLLOW_P_FACTOR100           200
+#define PL_LINE_FOLLOW_I_FACTOR100           50
+#define PL_LINE_FOLLOW_D_FACTOR100           0
+#define PL_LINE_FOLLOW_I_ANTI_WINDUP         5000
+#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     30				  /* max allowed speed in percent in line following mode*/
+
+#define PL_POS_LEFT_P_FACTOR100              0
+#define PL_POS_LEFT_I_FACTOR100              0
+#define PL_POS_LEFT_D_FACTOR100              0
+#define PL_POS_LEFT_I_ANTI_WINDUP            0
+#define PL_POS_LEFT_MAX_SPEED_PERCENT        0 			  /* max allowed speed in percent in positioning mode*/
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
