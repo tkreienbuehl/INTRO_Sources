@@ -69,7 +69,30 @@
 //#define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
 
 /* individual settings */
-#define MOTOR_L_INVERTED FALSE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
-#define MOTOR_R_INVERTED TRUE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
+#define PL_MOTOR_L_INVERTED FALSE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
+#define PL_MOTOR_R_INVERTED TRUE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
+
+/* PID Values */
+#define PL_SPEED_LEFT_P_FACTOR100         2000				  /* P-PART */
+#define PL_SPEED_LEFT_I_FACTOR100          200               /* I-PART */
+#define PL_SPEED_LEFT_D_FACTOR100            0               /* D-PART */
+#define PL_SPEED_LEFT_I_ANTI_WINDUP      20000               /* Anti windup for I*/
+
+#define PL_SPEED_RIGHT_P_FACTOR100        2000
+#define PL_SPEED_RIGHT_I_FACTOR100         200
+#define PL_SPEED_RIGHT_D_FACTOR100           0
+#define PL_SPEED_RIGHT_I_ANTI_WINDUP     20000
+
+#define PL_LINE_FOLLOW_P_FACTOR100           0
+#define PL_LINE_FOLLOW_I_FACTOR100           0
+#define PL_LINE_FOLLOW_D_FACTOR100           0
+#define PL_LINE_FOLLOW_I_ANTI_WINDUP         0
+#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     0				  /* max allowed speed in percent in line following mode*/
+
+#define PL_POS_LEFT_P_FACTOR100              0
+#define PL_POS_LEFT_I_FACTOR100              0
+#define PL_POS_LEFT_D_FACTOR100              0
+#define PL_POS_LEFT_I_ANTI_WINDUP            0
+#define PL_POS_LEFT_MAX_SPEED_PERCENT        0 			  /* max allowed speed in percent in positioning mode*/
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
