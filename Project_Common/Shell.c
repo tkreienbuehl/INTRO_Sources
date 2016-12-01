@@ -89,12 +89,15 @@
 		size_t bufSize;
 	} SHELL_IOdesc_t;
 
-#if CLS1_DEFAULT_SERIAL && (SHELL_CONFIG_HAS_SHELL_EXTRA_RTT || SHELL_CONFIG_HAS_SHELL_EXTRA_CDC)
+#if CLS1_DEFAULT_SERIAL && (SHELL_CONFIG_HAS_SHELL_EXTRA_RTT || SHELL_CONFIG_HAS_SHELL_EXTRA_CDC || SHELL_CONFIG_HAS_SHELL_EXTRA_BT)
 
 void SHELL_SendChar(uint8_t ch) {
 	CLS1_SendChar(ch);
-#ifdef SHELL_CONFIG_HAS_SHELL_EXTRA_RTT
+#if SHELL_CONFIG_HAS_SHELL_EXTRA_RTT
 	RTT1_SendChar(ch);
+#endif
+#if SHELL_CONFIG_HAS_SHELL_EXTRA_BT
+	BT1_SendChar(ch);
 #endif
 }
 
@@ -279,7 +282,12 @@ static void ShellTask(void *pvParameters) {
 	int i;
 	uint8_t arraySize = sizeof(ios)/sizeof(ios[0]);
 #endif
-	(void)pvParameters;
+(void)pvParameters;
+#if RNET_CONFIG_REMOTE_STDIO
+	static unsigned char radio_cmd_buf[48];
+	CLS1_ConstStdIOType* ioRemote = RSTDIO_GetStdioRx();
+	radio_cmd_buf[0] = '\0';
+#endif
 #if SHELL_HANDLER_ARRAY
 /* initialize buffers */
 	for(i=0;i<arraySize;i++) {
@@ -297,6 +305,11 @@ static void ShellTask(void *pvParameters) {
     (void)CLS1_ReadAndParseWithCommandTable(ios[i].buf, ios[i].bufSize, ios[i].stdio, CmdParserTable);
   }
 #endif
+#if RNET_CONFIG_REMOTE_STDIO
+  RSTDIO_Print(SHELL_GetStdio());
+  (void)CLS1_ReadAndParseWithCommandTable(radio_cmd_buf, sizeof(radio_cmd_buf), ioRemote, CmdParserTable);
+#endif
+
 #if PL_CONFIG_HAS_SHELL_QUEUE
 #if PL_CONFIG_SQUEUE_SINGLE_CHAR
     {
