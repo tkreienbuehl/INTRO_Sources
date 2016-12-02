@@ -89,10 +89,12 @@
 #define PL_LINE_FOLLOW_I_ANTI_WINDUP         (5000)
 #define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     (30)				  /* max allowed speed in percent in line following mode*/
 
-#define PL_POS_LEFT_P_FACTOR100              (0)
+#define PL_POS_LEFT_P_FACTOR100              (2000)
 #define PL_POS_LEFT_I_FACTOR100              (0)
 #define PL_POS_LEFT_D_FACTOR100              (0)
-#define PL_POS_LEFT_I_ANTI_WINDUP            (0)
-#define PL_POS_LEFT_MAX_SPEED_PERCENT        (0) 			  /* max allowed speed in percent in positioning mode*/
+#define PL_POS_LEFT_I_ANTI_WINDUP            (50000)
+#define PL_POS_LEFT_MAX_SPEED_PERCENT        (30) 			  /* max allowed speed in percent in positioning mode*/
+
+#define PL_POS_ANG_VALUE_90                  (750)
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
