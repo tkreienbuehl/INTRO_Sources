@@ -84,11 +84,12 @@ static REF_LineKind FollowSegment(void) {
 }
 
 static void StateMachine(void) {
+	REF_LineKind lineKind;
   switch (LF_currState) {
     case STATE_IDLE:
       break;
     case STATE_FOLLOW_SEGMENT:
-    	REF_LineKind lineKind = FollowSegment();
+    	lineKind= FollowSegment();
       if (lineKind == REF_LINE_FULL) {
     #if PL_CONFIG_HAS_LINE_MAZE
         LF_currState = STATE_TURN; /* make turn */
