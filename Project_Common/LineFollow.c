@@ -71,7 +71,7 @@ static void StateMachine(void);
  * \brief follows a line segment.
  * \return Returns TRUE if still on line segment
  */
-static bool FollowSegment(void) {
+static REF_LineKind FollowSegment(void) {
   uint16_t currLine;
   REF_LineKind currLineKind;
 
@@ -79,10 +79,8 @@ static bool FollowSegment(void) {
   currLineKind = REF_GetLineKind();
   if (currLineKind==REF_LINE_STRAIGHT) {
     PID_Line(currLine, REF_MIDDLE_LINE_VALUE); /* move along the line */
-    return TRUE;
-  } else {
-    return FALSE; /* intersection/change of direction or not on line any more */
   }
+  return currLineKind;
 }
 
 static void StateMachine(void) {
