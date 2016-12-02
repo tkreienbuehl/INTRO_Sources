@@ -65,6 +65,7 @@ void LF_StartStopFollowing(void) {
   }
 }
 
+
 static void StateMachine(void);
 
 /*!
@@ -111,20 +112,20 @@ static void StateMachine(void) {
       break;
 
     case STATE_TURN:
-      #if PL_CONFIG_HAS_LINE_MAZE
-      /*! \todo Handle maze turning */
-      #endif /* PL_CONFIG_HAS_LINE_MAZE */
+    	TURN_TurnAngle(180,NULL);
+    	(void)DRV_SetMode(DRV_MODE_NONE);
+    	LF_currState=STATE_FOLLOW_SEGMENT;
       break;
 
     case STATE_FINISHED:
-      #if PL_CONFIG_HAS_LINE_MAZE
-      /*! \todo Handle maze finished */
-      #endif /* PL_CONFIG_HAS_LINE_MAZE */
+        LF_currState = STATE_STOP; /* stop if we do not have a line any more */
+        SHELL_SendString((unsigned char*)"No line, finished!\r\n");
       break;
     case STATE_STOP:
       SHELL_SendString("Stopped!\r\n");
 #if PL_CONFIG_HAS_TURN
       TURN_Turn(TURN_STOP, NULL);
+
 #endif
       LF_currState = STATE_IDLE;
       break;
