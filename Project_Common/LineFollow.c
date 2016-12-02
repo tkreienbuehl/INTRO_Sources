@@ -90,7 +90,8 @@ static void StateMachine(void) {
     case STATE_IDLE:
       break;
     case STATE_FOLLOW_SEGMENT:
-      if (!FollowSegment()) {
+    	REF_LineKind lineKind = FollowSegment();
+      if (lineKind == REF_LINE_FULL) {
     #if PL_CONFIG_HAS_LINE_MAZE
         LF_currState = STATE_TURN; /* make turn */
         SHELL_SendString((unsigned char*)"no line, turn..\r\n");
@@ -98,6 +99,15 @@ static void StateMachine(void) {
         LF_currState = STATE_STOP; /* stop if we do not have a line any more */
         SHELL_SendString((unsigned char*)"No line, stopped!\r\n");
     #endif
+      }
+      else if (lineKind == REF_LINE_NONE) {
+	#if PL_CONFIG_HAS_LINE_MAZE
+		LF_currState = STATE_TURN; /* make turn */
+		SHELL_SendString((unsigned char*)"no line, turn..\r\n");
+	#else
+		LF_currState = STATE_TURN; /* make turn */
+		SHELL_SendString((unsigned char*)"no line, turn..\r\n");
+	#endif
       }
       break;
 
