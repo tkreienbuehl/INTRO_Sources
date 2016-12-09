@@ -149,14 +149,12 @@ static void KEYDBNC_OnDebounceEvent(DBNC_EventKinds event, DBNC_KeySet keys) {
     case DBNC_EVENT_RELEASED:
 #if PL_CONFIG_NOF_KEYS >= 1
       if (keys&(1<<0)) {
-        //EVNT_SetEvent(EVNT_SW1_RELEASED);
-    	 //todo make this more general
-    	  LF_StartFollowing();
+    	  EVNT_SetEvent(EVNT_SW1_RELEASED);
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 2
       if (keys&(1<<1)) {
-        EVNT_SetEvent(EVNT_SW2_RELEASED);
+    	  EVNT_SetEvent(EVNT_SW2_RELEASED);
       }
 #endif
 #if PL_CONFIG_NOF_KEYS >= 3

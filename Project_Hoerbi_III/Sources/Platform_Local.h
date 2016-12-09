@@ -42,7 +42,7 @@
 #define PL_LOCAL_CONFIG_HAS_SQUEUE_SINGLE_CHAR_DISABLED   /* disable single character support in shell queue */
 //#define PL_LOCAL_CONFIG_HAS_SEMAPHORE_DISABLED            /* disable semaphore test module */
 //#define PL_LOCAL_CONFIG_HAS_CONFIG_NVM_DISABLED           /* disable NVM storage */
-//#define PL_LOCAL_CONFIG_HAS_USB_CDC_DISABLED              /* disable USB CDC */
+#define PL_LOCAL_CONFIG_HAS_USB_CDC_DISABLED              /* disable USB CDC */
 
 /* remote controller hardware functionality */
 //#define PL_LOCAL_CONFIG_HAS_RADIO_DISABLED                /* disable Radio transceiver */
@@ -83,11 +83,11 @@
 #define PL_SPEED_RIGHT_D_FACTOR100           (0)
 #define PL_SPEED_RIGHT_I_ANTI_WINDUP     (40000)
 
-#define PL_LINE_FOLLOW_P_FACTOR100           (200)
+#define PL_LINE_FOLLOW_P_FACTOR100           (270)
 #define PL_LINE_FOLLOW_I_FACTOR100           (50)
 #define PL_LINE_FOLLOW_D_FACTOR100           (0)
 #define PL_LINE_FOLLOW_I_ANTI_WINDUP         (5000)
-#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     (30)				  /* max allowed speed in percent in line following mode*/
+#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     (45)				  /* max allowed speed in percent in line following mode*/
 
 #define PL_POS_LEFT_P_FACTOR100              (250)
 #define PL_POS_LEFT_I_FACTOR100              (1)
@@ -95,6 +95,6 @@
 #define PL_POS_LEFT_I_ANTI_WINDUP            (80)
 #define PL_POS_LEFT_MAX_SPEED_PERCENT        (80) 			  /* max allowed speed in percent in positioning mode*/
 
-#define PL_POS_ANG_VALUE_90                  (750)
+#define PL_POS_ANG_VALUE_90                  (690)
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */

@@ -23,8 +23,22 @@ void led1Neg(void) {
 	LED1_Neg();
 }
 
-void led2Neg(void) {
-	LED2_Neg();
+static void EventHandleTask(void* param) {
+	(void)param;		//no parameters needed
+	for (;;) {
+	#if PL_CONFIG_HAS_EVENTS
+		EVNT_HandleEvent(APP_EventHandler, TRUE);
+	#endif
+
+	#if PL_CONFIG_HAS_KEYS
+		#if PL_CONFIG_HAS_DEBOUNCE
+		  KEYDBNC_Process();
+		#else
+		  KEY_Scan();
+		#endif
+	#endif
+		FRTOS1_vTaskDelay(pdMS_TO_TICKS(50));
+	}
 }
 
 static void AppTask(void* param) {
@@ -37,44 +51,22 @@ static void AppTask(void* param) {
   }
 }
 
-static void DB_Keys(void){
-	for(;;) {
-		KEYDBNC_Process();
-		FRTOS1_vTaskDelay(pdMS_TO_TICKS(10));
-	}
-}
-
 void RTOS_Init(void) {
   static led_t led1;
-  static led_t led2;
 
-  led1.blinkFrequency = 200;
-  led1.callbackFunct = led1Neg;
-
-  led2.blinkFrequency = 500;
-  led2.callbackFunct = led2Neg;
+  led1.blinkFrequency = 1000;
+  led1.callbackFunct  = led1Neg;
 
   EVNT_SetEvent(EVNT_STARTUP); /* set startup event */
+
   /*! \todo Create tasks here */
   if (FRTOS1_xTaskCreate(AppTask, (portCHAR*)"App1", configMINIMAL_STACK_SIZE, (void*)&led1, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){} /* error case only, stay here! */
   }
   //SHELL_SendString((uint8_t*)"AppTask for LED 1 created");
-  if (FRTOS1_xTaskCreate(DB_Keys, (portCHAR*)"DB_Keys", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
+  if (FRTOS1_xTaskCreate(EventHandleTask, (portCHAR*)"Event_Handler", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){}
   }
-
-#if PL_CONFIG_HAS_EVENTS
-    EVNT_HandleEvent(APP_EventHandler, TRUE);
-#endif
-
-#if PL_CONFIG_HAS_KEYS
-	#if PL_CONFIG_HAS_DEBOUNCE
-	  KEYDBNC_Process();
-	#else
-	  KEY_Scan();
-	#endif
-#endif
   //SHELL_SendString((uint8_t*)"AppTask for LED 2 created");
 }
 

@@ -13,7 +13,6 @@
 #if PL_CONFIG_HAS_RTOS
 
 void led1Neg(void);
-void led2Neg(void);
 
 typedef struct {
 	unsigned short blinkFrequency;
