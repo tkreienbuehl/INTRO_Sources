@@ -60,6 +60,9 @@ void APP_EventHandler(EVNT_Handle event) {
 	case EVNT_SW1_PRESSED:
 		LED2_Neg();
 		SHELL_SendString((uint8_t*)"SW1 pressed\r\n");
+		#if PL_CONFIG_HAS_LCD
+
+		#endif
 		#if PL_CONFIG_HAS_BUZZER
 		BUZ_PlayTune(BUZ_TUNE_BUTTON);
 		#endif
