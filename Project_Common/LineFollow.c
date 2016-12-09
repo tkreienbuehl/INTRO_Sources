@@ -36,6 +36,8 @@ typedef enum {
   STATE_FOLLOW_SEGMENT,    /* line following segment, going forward */
   STATE_TURN,              /* reached an intersection, turning around */
   STATE_FINISHED,          /* reached finish area */
+  STATE_LINE_LEFT,			/*when line is at the left limit*/
+  STATE_LINE_RIGHT,		  /*when line is at the right limit*/
   STATE_STOP               /* stop the engines */
 } StateType;
 
@@ -92,25 +94,32 @@ static void StateMachine(void) {
     case STATE_FOLLOW_SEGMENT:
     	lineKind= FollowSegment();
       if (lineKind == REF_LINE_FULL) {
-    #if PL_CONFIG_HAS_LINE_MAZE
-        LF_currState = STATE_TURN; /* make turn */
-        SHELL_SendString((unsigned char*)"no line, turn..\r\n");
-    #else
         LF_currState = STATE_STOP; /* stop if we do not have a line any more */
         SHELL_SendString((unsigned char*)"No line, stopped!\r\n");
-    #endif
       }
       else if (lineKind == REF_LINE_NONE) {
-	#if PL_CONFIG_HAS_LINE_MAZE
 		LF_currState = STATE_TURN; /* make turn */
 		SHELL_SendString((unsigned char*)"no line, turn..\r\n");
-	#else
-		LF_currState = STATE_TURN; /* make turn */
-		SHELL_SendString((unsigned char*)"no line, turn..\r\n");
-	#endif
+      }
+      else if (lineKind == REF_LINE_LEFT) {
+		LF_currState = STATE_LINE_LEFT; /* make turn */
+		SHELL_SendString((unsigned char*)"line left, turn..\r\n");
+      }
+      else if (lineKind == REF_LINE_RIGHT) {
+		LF_currState = STATE_LINE_RIGHT; /* make turn */
+		SHELL_SendString((unsigned char*)"line right, turn..\r\n");
       }
       break;
-
+    case STATE_LINE_LEFT:
+    	TURN_TurnAngle(10,NULL);
+    	(void)DRV_SetMode(DRV_MODE_NONE);
+    	LF_currState=STATE_FOLLOW_SEGMENT;
+    	break;
+    case STATE_LINE_RIGHT:
+    	TURN_TurnAngle(-10,NULL);
+    	(void)DRV_SetMode(DRV_MODE_NONE);
+    	LF_currState=STATE_FOLLOW_SEGMENT;
+    	break;
     case STATE_TURN:
     	TURN_TurnAngle(180,NULL);
     	(void)DRV_SetMode(DRV_MODE_NONE);
@@ -125,7 +134,6 @@ static void StateMachine(void) {
       SHELL_SendString("Stopped!\r\n");
 #if PL_CONFIG_HAS_TURN
       TURN_Turn(TURN_STOP, NULL);
-
 #endif
       LF_currState = STATE_IDLE;
       break;
