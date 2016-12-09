@@ -13,6 +13,11 @@
 #include "Keys.h"
 #include "Application.h"
 #include "Shell.h"
+#if PL_CONFIG_HAS_KEYS
+	#if PL_CONFIG_HAS_DEBOUNCE
+		#include "KeyDebounce.h"
+	#endif
+#endif
 
 void led1Neg(void) {
 	LED1_Neg();
@@ -51,6 +56,18 @@ void RTOS_Init(void) {
   if (FRTOS1_xTaskCreate(AppTask, (portCHAR*)"App2", configMINIMAL_STACK_SIZE, (void*)&led2, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){}
   }
+
+#if PL_CONFIG_HAS_EVENTS
+    EVNT_HandleEvent(APP_EventHandler, TRUE);
+#endif
+
+#if PL_CONFIG_HAS_KEYS
+	#if PL_CONFIG_HAS_DEBOUNCE
+	  KEYDBNC_Process();
+	#else
+	  KEY_Scan();
+	#endif
+#endif
   //SHELL_SendString((uint8_t*)"AppTask for LED 2 created");
 }
 
