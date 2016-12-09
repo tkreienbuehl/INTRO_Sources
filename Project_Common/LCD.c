@@ -27,10 +27,10 @@ static bool requestLCDUpdate = FALSE;
 
 #if PL_CONFIG_HAS_LCD_MENU
 typedef enum {
-  LCD_MENU_ID_NONE = LCDMENU_ID_NONE, /* special value! */
-  LCD_MENU_ID_MAIN,
-    LCD_MENU_ID_BACKLIGHT,
-    LCD_MENU_ID_NUM_VALUE,
+	LCD_MENU_ID_NONE = LCDMENU_ID_NONE, /* special value! */
+	LCD_MENU_ID_MAIN,
+	LCD_MENU_ID_BACKLIGHT,
+	LCD_MENU_ID_NUM_VALUE,
 } LCD_MenuIDs;
 
 static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
@@ -124,6 +124,32 @@ static void DrawLines(void) {
   }
 }
 
+static void DrawCircles(void) {
+	GDisp1_PixelDim x, y;
+	static unsigned int xPosMax = GDisp1_GetWidth()-5;
+	static unsigned int yPosMax = GDisp1_GetHeight()-5;
+
+	LCD_LED_On();
+	GDisp1_Clear();
+	GDisp1_UpdateFull();
+
+	for (int i=0; i<10; i++) {
+		do {
+			x = (GDisp1_PixelDim)rand()+5;
+		}
+		while(x > xPosMax);
+		do {
+			y = (GDisp1_PixelDim)rand()+5;
+		}
+		while(y>yPosMax);
+		GDisp1_DrawCircle(x,y,5,GDisp1_COLOR_BLACK);
+		GDisp1_UpdateFull();
+		vTaskDelay(pdMS_TO_TICKS(250));
+		GDisp1_Clear();
+		GDisp1_UpdateFull();
+	}
+}
+
 static void DrawFont(void) {
   FDisp1_PixelDim x, y;
 
@@ -144,15 +170,15 @@ static void DrawFont(void) {
 static void DrawText(void) {
   GDisp1_Clear();
   GDisp1_UpdateFull();
-  PDC1_WriteLineStr(1, "hello");
+  PDC1_WriteLineStr(1, (uint8_t*)"hello");
   vTaskDelay(pdMS_TO_TICKS(200));
-  PDC1_WriteLineStr(2, "world");
+  PDC1_WriteLineStr(2, (uint8_t*)"world");
   vTaskDelay(pdMS_TO_TICKS(200));
-  PDC1_WriteLineStr(3, "out");
+  PDC1_WriteLineStr(3, (uint8_t*)"out");
   vTaskDelay(pdMS_TO_TICKS(200));
-  PDC1_WriteLineStr(4, "there");
+  PDC1_WriteLineStr(4, (uint8_t*)"there");
   vTaskDelay(pdMS_TO_TICKS(200));
-  PDC1_WriteLineStr(5, "!!!!!");
+  PDC1_WriteLineStr(5, (uint8_t*)"!!!!!");
   vTaskDelay(pdMS_TO_TICKS(200));
 }
 
@@ -169,10 +195,11 @@ static void ShowTextOnLCD(unsigned char *text) {
 static void LCD_Task(void *param) {
   (void)param; /* not used */
 #if 1
-  ShowTextOnLCD("Press a key!");
+  ShowTextOnLCD((uint8_t*)"Press a key!");
   DrawText();
   /* \todo extend */
-  DrawFont();
+  //DrawFont();
+  //DrawLines();
   DrawCircles();
 #endif
 #if PL_CONFIG_HAS_LCD_MENU
@@ -190,39 +217,43 @@ static void LCD_Task(void *param) {
       requestLCDUpdate = FALSE;
       LCDMenu_OnEvent(LCDMENU_EVENT_DRAW, NULL);
     }
-#if 0 /*! \todo Change this to for your own needs, or use direct task notification */
+#if 1 /*! \todo Change this to for your own needs, or use direct task notification */
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
       LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
-//      ShowTextOnLCD("left");
+      //ShowTextOnLCD("left");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
       LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
-//      ShowTextOnLCD("right");
+      //ShowTextOnLCD("right");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
       LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-//      ShowTextOnLCD("up");
+      //ShowTextOnLCD("up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
       LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-//      ShowTextOnLCD("down");
+      //ShowTextOnLCD("down");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
       LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
-//      ShowTextOnLCD("center");
+      //ShowTextOnLCD("center");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
       LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-//      ShowTextOnLCD("side up");
+      //ShowTextOnLCD("side up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
       LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-//      ShowTextOnLCD("side down");
+      //ShowTextOnLCD("side down");
     }
 #endif
 #endif /* PL_CONFIG_HAS_LCD_MENU */
     vTaskDelay(pdMS_TO_TICKS(20));
   }
+}
+
+void LCD_PrintSWPressed(uint8_t* string) {
+	ShowTextOnLCD(string);
 }
 
 void LCD_Deinit(void) {
@@ -233,7 +264,8 @@ void LCD_Deinit(void) {
 
 void LCD_Init(void) {
   LedBackLightisOn =  TRUE;
-  if (xTaskCreate(LCD_Task, "LCD", configMINIMAL_STACK_SIZE+30, NULL, tskIDLE_PRIORITY, &LCDTaskHandle) != pdPASS) {
+  //if (xTaskCreate(LCD_Task, "LCD", configMINIMAL_STACK_SIZE+30, NULL, tskIDLE_PRIORITY, &LCDTaskHandle) != pdPASS) {
+  if (xTaskCreate(LCD_Task, "LCD", configMINIMAL_STACK_SIZE+30, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
     for(;;){} /* error! probably out of memory */
   }
 #if PL_CONFIG_HAS_LCD_MENU

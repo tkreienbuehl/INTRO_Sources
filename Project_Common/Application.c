@@ -41,10 +41,12 @@
 #if PL_CONFIG_HAS_LINE_FOLLOW
 	#include "LineFollow.h"
 #endif
+#if PL_CONFIG_HAS_LCD
+	#include "LCD.h"
+#endif
 
 #if PL_CONFIG_HAS_EVENTS
 void APP_EventHandler(EVNT_Handle event) {
-	static bool lineState;
   switch(event) {
   case EVNT_STARTUP:
     LED1_On(); /* just do something */
@@ -60,71 +62,89 @@ void APP_EventHandler(EVNT_Handle event) {
 	case EVNT_SW1_PRESSED:
 		LED2_Neg();
 		SHELL_SendString((uint8_t*)"SW1 pressed\r\n");
-		#if PL_CONFIG_HAS_LCD
-
-		#endif
 		#if PL_CONFIG_HAS_BUZZER
 		BUZ_PlayTune(BUZ_TUNE_BUTTON);
 		#endif
 		break;
 	case EVNT_SW1_RELEASED:
 		SHELL_SendString((uint8_t*)"SW1 released\r\n");
-	#if PL_CONFIG_BOARD_IS_ROBO
-		LF_StartStopFollowing();
-	#endif
+		#if PL_CONFIG_BOARD_IS_ROBO
+			LF_StartStopFollowing();
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_BTN_RIGHT);
+		#endif
 		break;
 	#if PL_CONFIG_NOF_KEYS>=2
 	case EVNT_SW2_PRESSED:
 		SHELL_SendString((uint8_t*)"SW2 pressed\r\n");
 		#if PL_CONFIG_HAS_BUZZER
-		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+			BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_BTN_LEFT);
 		#endif
 		break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=3
 	case EVNT_SW3_PRESSED:
-	  //CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
-	  SHELL_SendString((uint8_t*)"SW3 pressed\r\n");
-	  #if PL_CONFIG_HAS_BUZZER
-	  BUZ_PlayTune(BUZ_TUNE_BUTTON);
-	  #endif
+		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
+		SHELL_SendString((uint8_t*)"SW3 pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_BTN_DOWN);
+		#endif
 	  break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=4
 	case EVNT_SW4_PRESSED:
-	  //CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
-	  SHELL_SendString((uint8_t*)"SW4 pressed\r\n");
-	  #if PL_CONFIG_HAS_BUZZER
-	  BUZ_PlayTune(BUZ_TUNE_BUTTON);
-	  #endif
-	  break;
+		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
+		SHELL_SendString((uint8_t*)"SW4 pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_BTN_CENTER);
+		#endif
+		break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=5
 	case EVNT_SW5_PRESSED:
-	  //CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
-	  SHELL_SendString((uint8_t*)"SW5 pressed\r\n");
-	  #if PL_CONFIG_HAS_BUZZER
-	  BUZ_PlayTune(BUZ_TUNE_BUTTON);
-	  #endif
-	  break;
+		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
+		SHELL_SendString((uint8_t*)"SW5 pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_BTN_UP);
+		#endif
+		break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=6
 	case EVNT_SW6_PRESSED:
-	  //CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
-	  SHELL_SendString((uint8_t*)"SW6 pressed\r\n");
-	  #if PL_CONFIG_HAS_BUZZER
-	  BUZ_PlayTune(BUZ_TUNE_BUTTON);
-	  #endif
-	  break;
+		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
+		SHELL_SendString((uint8_t*)"SW6 pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_SIDE_BTN_DOWN);
+		#endif
+		break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=7
 	case EVNT_SW7_PRESSED:
-	  //CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
-	  SHELL_SendString((uint8_t*)"SW7 pressed\r\n");
-	  #if PL_CONFIG_HAS_BUZZER
-	  BUZ_PlayTune(BUZ_TUNE_BUTTON);
-	  #endif
-	  break;
+		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
+		SHELL_SendString((uint8_t*)"SW7 pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_SIDE_BTN_UP);
+		#endif
+		break;
 	#endif
   #endif
 #endif /* PL_CONFIG_HAS_KEYS */

@@ -71,7 +71,7 @@ void Cpu_OnNMIINT(void)
 */
 void TI1_OnInterrupt(void)
 {
-	TMR_OnInterrupt();
+	//TMR_OnInterrupt();
 }
 
 /*
@@ -118,6 +118,7 @@ void FRTOS1_vApplicationTickHook(void)
 {
   /* Called for every RTOS tick. */
   /* Write your code here ... */
+	TMR_OnInterrupt();
 }
 
 /*

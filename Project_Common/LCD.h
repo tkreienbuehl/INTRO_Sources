@@ -18,6 +18,8 @@
 #include "RPHY.h"
 
 uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet);
+
+void LCD_PrintSWPressed(uint8_t* string);
 #endif
 
 /*!

@@ -19,6 +19,9 @@
 #if PL_CONFIG_BOARD_IS_ROBO_V2
   #include "PORT_PDD.h"
 #endif
+#if PL_CONFIG_HAS_LCD_MENU
+  #include "LCDMenu.h"
+#endif
 
 #if PL_CONFIG_HAS_RTOS
 #include "FreeRTOSConfig.h"
