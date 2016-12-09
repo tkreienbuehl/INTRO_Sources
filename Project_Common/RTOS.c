@@ -37,6 +37,13 @@ static void AppTask(void* param) {
   }
 }
 
+static void DB_Keys(void){
+	for(;;) {
+		KEYDBNC_Process();
+		FRTOS1_vTaskDelay(pdMS_TO_TICKS(10));
+	}
+}
+
 void RTOS_Init(void) {
   static led_t led1;
   static led_t led2;
@@ -53,7 +60,7 @@ void RTOS_Init(void) {
 	  for(;;){} /* error case only, stay here! */
   }
   //SHELL_SendString((uint8_t*)"AppTask for LED 1 created");
-  if (FRTOS1_xTaskCreate(AppTask, (portCHAR*)"App2", configMINIMAL_STACK_SIZE, (void*)&led2, tskIDLE_PRIORITY, NULL) != pdPASS) {
+  if (FRTOS1_xTaskCreate(DB_Keys, (portCHAR*)"DB_Keys", configMINIMAL_STACK_SIZE, NULL, tskIDLE_PRIORITY, NULL) != pdPASS) {
 	  for(;;){}
   }
 
