@@ -20,6 +20,9 @@
 #include "FRTOS1.h"
 #include "RApp.h"
 #include "LCDMenu.h"
+#if PL_CONFIG_HAS_RADIO
+#include "RNet_App.h"
+#endif
 
 /* status variables */
 static bool LedBackLightisOn = TRUE;
@@ -31,6 +34,15 @@ typedef enum {
 	LCD_MENU_ID_MAIN,
 	LCD_MENU_ID_BACKLIGHT,
 	LCD_MENU_ID_NUM_VALUE,
+	LCD_MENU_ID_ROBO_MAIN,
+	LCD_MENU_ID_ROBO_DRIVE,
+	LCD_MENU_ID_ROBO_LINE,
+	LCD_MENU_ID_ROBO_MUSIC,
+	LCD_MENU_ID_PLAY_TUNE,
+	LCD_MENU_ID_ROBO_SETTINGS,
+	LCD_MENU_ID_GAMES,
+	LCD_MENU_ID_TETRIS,
+	LCD_MENU_ID_SNAKE,
 } LCD_MenuIDs;
 
 static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
@@ -79,10 +91,19 @@ static LCDMenu_StatusFlags BackLightMenuHandler(const struct LCDMenu_MenuItem_ *
 }
 
 static const LCDMenu_MenuItem menus[] =
-{/* id,                                     grp, pos,   up,                       down,                             text,           callback                      flags                  */
-    {LCD_MENU_ID_MAIN,                        0,   0,   LCD_MENU_ID_NONE,         LCD_MENU_ID_BACKLIGHT,            "General",      NULL,                         LCDMENU_MENU_FLAGS_NONE},
-      {LCD_MENU_ID_BACKLIGHT,                 1,   0,   LCD_MENU_ID_MAIN,         LCD_MENU_ID_NONE,                 NULL,           BackLightMenuHandler,         LCDMENU_MENU_FLAGS_NONE},
-      {LCD_MENU_ID_NUM_VALUE,                 1,   1,   LCD_MENU_ID_MAIN,         LCD_MENU_ID_NONE,                 NULL,           ValueChangeHandler,           LCDMENU_MENU_FLAGS_EDITABLE},
+{/* id,								grp,pos,up,						down,						text,				callback					flags                  */
+    {LCD_MENU_ID_MAIN,				0,	0,	LCD_MENU_ID_NONE,       LCD_MENU_ID_BACKLIGHT,		"Remote Settings",  NULL,                       LCDMENU_MENU_FLAGS_NONE},
+    	{LCD_MENU_ID_BACKLIGHT,		1,	0,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	BackLightMenuHandler,       LCDMENU_MENU_FLAGS_NONE},
+    	{LCD_MENU_ID_NUM_VALUE,		1,	1,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	ValueChangeHandler,         LCDMENU_MENU_FLAGS_EDITABLE},
+	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,		LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			"Drive Herbie",		NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_LINE,		2,	1,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_MUSIC,	2,	2,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			"Play tune",		NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_SETTINGS,	2,	3,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_NONE},
+	{LCD_MENU_ID_GAMES,				0,	2,	LCD_MENU_ID_NONE,		LCD_MENU_ID_TETRIS,			"Games",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_TETRIS,		3,	0,	LCD_MENU_ID_GAMES,		LCD_MENU_ID_NONE,			"Tetris",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_SNAKE,			3,	1,	LCD_MENU_ID_GAMES,		LCD_MENU_ID_NONE,			"Snake",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 };
 
 uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet) {
@@ -236,6 +257,8 @@ static void LCD_Task(void *param) {
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
       LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+      //RSTDIO_SendToTxStdio(RSTDIO_QUEUE_TX_IN, "buzzer play tune", sizeof("buzzer play tune")-1);
+      (void)RAPP_SendPayloadDataBlock((uint8_t*)"F", sizeof("F")-1, RAPP_MSG_TYPE_JOYSTICK_BTN, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
       //ShowTextOnLCD("center");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */

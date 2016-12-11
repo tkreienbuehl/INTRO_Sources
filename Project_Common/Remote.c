@@ -14,7 +14,7 @@
 #include "UTIL1.h"
 #include "Shell.h"
 #if PL_CONFIG_HAS_PID
-  #include "PID.h"
+  #include "Pid.h"
 #endif
 #if PL_CONFIG_HAS_MOTOR
   #include "Motor.h"
@@ -131,6 +131,8 @@ static void RemoteTask (void *pvParameters) {
         (void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_JOYSTICK_XY, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
         LED1_Neg();
       }
+#else
+
 #endif
       FRTOS1_vTaskDelay(200/portTICK_PERIOD_MS);
     } else {
