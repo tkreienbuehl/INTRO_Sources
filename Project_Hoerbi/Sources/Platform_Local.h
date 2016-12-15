@@ -88,14 +88,18 @@
 #define PL_LINE_FOLLOW_I_FACTOR100           50
 #define PL_LINE_FOLLOW_D_FACTOR100           0
 #define PL_LINE_FOLLOW_I_ANTI_WINDUP         5000
-#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     30				  /* max allowed speed in percent in line following mode*/
+#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     60				  /* max allowed speed in percent in line following mode*/
 
 #define PL_POS_LEFT_P_FACTOR100              250
 #define PL_POS_LEFT_I_FACTOR100              0
 #define PL_POS_LEFT_D_FACTOR100              0
 #define PL_POS_LEFT_I_ANTI_WINDUP            10000
-#define PL_POS_LEFT_MAX_SPEED_PERCENT        70 			  /* max allowed speed in percent in positioning mode*/
+#define PL_POS_LEFT_MAX_SPEED_PERCENT        50			  /* max allowed speed in percent in positioning mode*/
 
 #define PL_POS_ANG_VALUE_90				     665
+
+/* Games */
+#define PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED				/* disable snake game*/
+#define PL_LOCAL_CONFIG_HAS_TETRIS_GAME_DISABLED			/* disable tetris game*/
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
