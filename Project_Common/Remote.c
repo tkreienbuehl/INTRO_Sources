@@ -300,7 +300,19 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
       *handled = FALSE; /* no shell and no buzzer? */
 #endif
       break;
-
+    case RAPP_MSG_TYPE_PLAY_TUNE:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_SHELL && PL_CONFIG_HAS_BUZZER && PL_CONFIG_HAS_REMOTE
+    	if (val == '0') {
+    		SHELL_ParseCmd((unsigned char*)"buzzer play tune");
+    	}
+    	else if (val == '1') {
+    		SHELL_ParseCmd((uint8_t*)"buzzer play happy");
+    	}
+#else
+      *handled = FALSE; /* no shell and no buzzer? */
+#endif
     default:
       break;
   } /* switch */

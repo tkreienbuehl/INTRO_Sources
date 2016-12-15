@@ -63,16 +63,19 @@ void APP_EventHandler(EVNT_Handle event) {
 		LED2_Neg();
 		SHELL_SendString((uint8_t*)"SW1 pressed\r\n");
 		#if PL_CONFIG_HAS_BUZZER
-		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+			BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_BTN_RIGHT);
+		#endif
+		#if PL_CONFIG_HAS_SNAKE_GAME
+			EVNT_SetEvent(EVNT_SNAKE_RIGHT);
 		#endif
 		break;
 	case EVNT_SW1_RELEASED:
 		SHELL_SendString((uint8_t*)"SW1 released\r\n");
 		#if PL_CONFIG_BOARD_IS_ROBO
 			LF_StartStopFollowing();
-		#endif
-		#if PL_CONFIG_HAS_LCD_MENU
-			EVNT_SetEvent(EVNT_LCD_BTN_RIGHT);
 		#endif
 		break;
 	#if PL_CONFIG_NOF_KEYS>=2
@@ -84,6 +87,9 @@ void APP_EventHandler(EVNT_Handle event) {
 		#if PL_CONFIG_HAS_LCD_MENU
 			EVNT_SetEvent(EVNT_LCD_BTN_LEFT);
 		#endif
+		#if PL_CONFIG_HAS_SNAKE_GAME
+			EVNT_SetEvent(EVNT_SNAKE_LEFT);
+		#endif
 		break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=3
@@ -91,10 +97,13 @@ void APP_EventHandler(EVNT_Handle event) {
 		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
 		SHELL_SendString((uint8_t*)"SW3 pressed\r\n");
 		#if PL_CONFIG_HAS_BUZZER
-		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+			BUZ_PlayTune(BUZ_TUNE_BUTTON);
 		#endif
 		#if PL_CONFIG_HAS_LCD_MENU
 			EVNT_SetEvent(EVNT_LCD_BTN_DOWN);
+		#endif
+		#if PL_CONFIG_HAS_SNAKE_GAME
+			EVNT_SetEvent(EVNT_SNAKE_DOWN);
 		#endif
 	  break;
 	#endif
@@ -103,10 +112,13 @@ void APP_EventHandler(EVNT_Handle event) {
 		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
 		SHELL_SendString((uint8_t*)"SW4 pressed\r\n");
 		#if PL_CONFIG_HAS_BUZZER
-		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+			BUZ_PlayTune(BUZ_TUNE_BUTTON);
 		#endif
 		#if PL_CONFIG_HAS_LCD_MENU
 			EVNT_SetEvent(EVNT_LCD_BTN_CENTER);
+		#endif
+		#if PL_CONFIG_HAS_SNAKE_GAME
+			EVNT_SetEvent(EVNT_SNAKE_START_PAUSE);
 		#endif
 		break;
 	#endif
@@ -115,10 +127,13 @@ void APP_EventHandler(EVNT_Handle event) {
 		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
 		SHELL_SendString((uint8_t*)"SW5 pressed\r\n");
 		#if PL_CONFIG_HAS_BUZZER
-		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+			BUZ_PlayTune(BUZ_TUNE_BUTTON);
 		#endif
 		#if PL_CONFIG_HAS_LCD_MENU
 			EVNT_SetEvent(EVNT_LCD_BTN_UP);
+		#endif
+		#if PL_CONFIG_HAS_SNAKE_GAME
+			EVNT_SetEvent(EVNT_SNAKE_UP);
 		#endif
 		break;
 	#endif

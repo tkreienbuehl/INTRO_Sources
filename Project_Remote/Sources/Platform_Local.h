@@ -68,4 +68,8 @@
 #define PL_LOCAL_CONFIG_HAS_BLUETOOTH_DISABLED            /* disable Bluetooth */
 #define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
 
+/* Games */
+//#define PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED				/* disable snake game*/
+#define PL_LOCAL_CONFIG_HAS_TETRIS_GAME_DISABLED			/* disable tetris game*/
+
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */

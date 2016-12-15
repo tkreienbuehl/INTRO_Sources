@@ -11,6 +11,7 @@
 #include "GDisp1.h"
 #include "FDisp1.h"
 #include "GFONT1.h"
+#include "Snake.h"
 
 /* LCD specific constants */ /*! \todo move this out */
 #define LCDMENU_NOF_MENU_LINES            4  /* number of lines on display */
@@ -171,6 +172,7 @@ static void LCDMenu_CursorUp(void) {
       if ((item->flags&LCDMENU_MENU_FLAGS_EDITABLE) && menuStatus.editID==menuStatus.selectedID) { /* editable item and editing it? */
         flags |= item->handler(item, LCDMENU_EVENT_INCREMENT, NULL); /* send edit event */
       }
+
     }
     if (menuStatus.editID==LCDMENU_ID_NONE) { /* we are currently not editing it */
       if (item->pos>0) {
@@ -257,7 +259,7 @@ static void LCDMenu_CursorLeft(void) {
         flags |= item->handler(item, LCDMENU_EVENT_DECREMENT, NULL); /* send edit event */
       }
     }
-    if (menuStatus.editID==LCDMENU_ID_NONE && item->lvlUpID!=LCDMENU_ID_NONE) { /* we are currently not ediging, and havinig a menu on the upper level? */
+    if (menuStatus.editID==LCDMENU_ID_NONE && item->lvlUpID!=LCDMENU_ID_NONE) { /* we are currently not editing, and havinig a menu on the upper level? */
       item = LCDMenu_GeIdMenuItem(item->lvlUpID); /* get target item */
       menuStatus.selectedID = item->id;
       menuStatus.topGroup = item->group;

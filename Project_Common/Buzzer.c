@@ -125,13 +125,13 @@ uint8_t BUZ_PlayTune(BUZ_Tunes tune) {
   return TRG_SetTrigger(TRG_BUZ_TUNE, 0, BUZ_Play, (void*)&BUZ_Melodies[tune]);
 }
 
-
 #if PL_CONFIG_HAS_SHELL
 static uint8_t BUZ_PrintHelp(const CLS1_StdIOType *io) {
   CLS1_SendHelpStr((unsigned char*)"buzzer", (unsigned char*)"Group of buzzer commands\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  help|status", (unsigned char*)"Shows radio help or status\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  buz <freq> <time>", (unsigned char*)"Beep for time (ms) and frequency (kHz)\r\n", io->stdOut);
   CLS1_SendHelpStr((unsigned char*)"  play tune", (unsigned char*)"Play tune\r\n", io->stdOut);
+  CLS1_SendHelpStr((unsigned char*)"  play happy", (unsigned char*)"Play happy\r\n", io->stdOut);
   return ERR_OK;
 }
 
@@ -164,6 +164,10 @@ uint8_t BUZ_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_Std
     *handled = TRUE;
     return BUZ_PlayTune(BUZ_TUNE_WELCOME);
   }
+  else if (UTIL1_strcmp((char*)cmd, (char*)"buzzer play happy")==0) {
+  *handled = TRUE;
+  return BUZ_PlayTune(BUZ_TUNE_HAPPY);
+}
   return ERR_OK;
 }
 #endif /* PL_CONFIG_HAS_SHELL */

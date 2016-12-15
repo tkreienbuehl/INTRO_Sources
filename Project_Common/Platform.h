@@ -72,6 +72,8 @@
 #define PL_CONFIG_HAS_CONFIG_NVM        (1 && !defined(PL_LOCAL_CONFIG_HAS_CONFIG_NVM_DISABLED))
 #define PL_CONFIG_HAS_RADIO             (1 && !defined(PL_LOCAL_CONFIG_HAS_RADIO_DISABLED))
 #define PL_CONFIG_HAS_USB_CDC           (1 && !defined(PL_LOCAL_CONFIG_HAS_USB_CDC_DISABLED))
+#define PL_CONFIG_HAS_SNAKE_GAME		(1 && !defined(PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED))
+#define PL_CONFIG_HAS_TETRIS_GAME		(1 && !defined(PL_LOCAL_CONFIG_HAS_TETRIS_GAME_DISABLED))
 
 /* remote controller specific features */
 #define PL_CONFIG_HAS_LCD               (1 && !defined(PL_LOCAL_CONFIG_HAS_LCD_DISABLED))

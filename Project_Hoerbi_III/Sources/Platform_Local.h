@@ -68,6 +68,10 @@
 //#define PL_LOCAL_CONFIG_HAS_BLUETOOTH_DISABLED            /* disable Bluetooth */
 //#define PL_LOCAL_CONFIG_HAS_BUZZER_DISABLED               /* disable buzzer (only on robot) */
 
+/* Games */
+#define PL_LOCAL_CONFIG_HAS_SNAKE_GAME_DISABLED				/* disable snake game*/
+#define PL_LOCAL_CONFIG_HAS_TETRIS_GAME_DISABLED			/* disable tetris game*/
+
 /* individual settings */
 #define PL_MOTOR_L_INVERTED FALSE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
 #define PL_MOTOR_R_INVERTED TRUE							  /* in motor.h set MOTOR_HAS_INVERT 1 to use this value*/
