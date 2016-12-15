@@ -148,6 +148,15 @@ void APP_EventHandler(EVNT_Handle event) {
 			EVNT_SetEvent(EVNT_LCD_SIDE_BTN_DOWN);
 		#endif
 		break;
+	case EVNT_SW6_LPRESSED:
+		SHELL_SendString((uint8_t*)"SW6 long pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_SIDE_BTN_DOWN_LONG);
+		#endif
+		break;
 	#endif
 	#if PL_CONFIG_NOF_KEYS>=7
 	case EVNT_SW7_PRESSED:
@@ -158,6 +167,15 @@ void APP_EventHandler(EVNT_Handle event) {
 		#endif
 		#if PL_CONFIG_HAS_LCD_MENU
 			EVNT_SetEvent(EVNT_LCD_SIDE_BTN_UP);
+		#endif
+		break;
+	case EVNT_SW7_LPRESSED:
+		SHELL_SendString((uint8_t*)"SW7 long pressed\r\n");
+		#if PL_CONFIG_HAS_BUZZER
+		BUZ_PlayTune(BUZ_TUNE_BUTTON);
+		#endif
+		#if PL_CONFIG_HAS_LCD_MENU
+			EVNT_SetEvent(EVNT_LCD_SIDE_BTN_UP_LONG);
 		#endif
 		break;
 	#endif

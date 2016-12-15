@@ -106,6 +106,7 @@ static LCDMenu_StatusFlags DriveHandler(const struct LCDMenu_MenuItem_ *item, LC
 	  }
 	  else {
 		  isInAppMode = TRUE;
+		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_START_DRIVE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
 		  flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	  }
     }
