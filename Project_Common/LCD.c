@@ -79,23 +79,28 @@ static LCDMenu_StatusFlags DriveHandler(const struct LCDMenu_MenuItem_ *item, LC
 
   (void)item;
   if (event==LCDMENU_EVENT_GET_TEXT) {
-    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"Val: ");
-    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
-    *dataP = valueBuf;
+	  *dataP = "Drive Herbie";
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-  } else if (event==LCDMENU_EVENT_INC_UP) {
-
-    *dataP = valueBuf;
+  }
+  else if (event==LCDMENU_EVENT_INC_UP) {
+	  (void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_SPD, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-  } else if (event==LCDMENU_EVENT_DEC_DOWN) {
+  }
+  else if (event==LCDMENU_EVENT_DEC_DOWN) {
 	  (void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_DEC_SPD, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-  } else if (event==LCDMENU_EVENT_LEFT_INC) {
-
+  }
+  else if (event==LCDMENU_EVENT_LEFT_INC) {
+	  (void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_LEFT, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
-  }else if (event==LCDMENU_EVENT_RIGHT_INC) {
-
+  }
+  else if (event==LCDMENU_EVENT_RIGHT_INC) {
+	  (void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_RIGHT, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
       flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+    }
+  else if (event==LCDMENU_EVENT_ENTER) { /* toggle setting */
+      // TODO SET A
+      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW|LCDMENU_MENU_FLAGS_DRIVEABLE;
     }
   return flags;
 }
@@ -149,7 +154,7 @@ static const LCDMenu_MenuItem menus[] =
     	{LCD_MENU_ID_BACKLIGHT,		1,	0,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	BackLightMenuHandler,       LCDMENU_MENU_FLAGS_NONE},
     	{LCD_MENU_ID_NUM_VALUE,		1,	1,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	ValueChangeHandler,         LCDMENU_MENU_FLAGS_EDITABLE},
 	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,		LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_NONE},
-		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_DRIVEABLE},
+		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				DriveHandler,				LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_HAPPY,4,	1,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
