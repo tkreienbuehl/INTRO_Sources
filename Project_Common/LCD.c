@@ -136,7 +136,7 @@ static LCDMenu_StatusFlags PlayMusicMenuHandler(const struct LCDMenu_MenuItem_ *
 			(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_PLAY_TUNE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
 		}
 		else {
-			(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_PLAY_TUNE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+			(void)RAPP_SendPayloadDataBlock((uint8_t*)"1", sizeof("1")-1, RAPP_MSG_TYPE_PLAY_TUNE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
 		}
 		flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	}

@@ -25,6 +25,7 @@
 #endif
 #if PL_CONFIG_HAS_DRIVE
   #include "Drive.h"
+  #include "Turn.h"
 #endif
 #if PL_CONFIG_HAS_LEDS
   #include "LED.h"
@@ -211,12 +212,12 @@ static void REMOTE_HandleMotorMsg(int16_t speedVal, int16_t directionVal, int16_
 #if PL_CONFIG_HAS_MOTOR
 static int16_t scaleJoystickTo1K(int8_t val) {
   /* map speed from -128...127 to -1000...+1000 */
-  int tmp;
+  int16_t tmp;
 
   if (val>0) {
-    tmp = ((val*10)/127)*100;
+    tmp = (int16_t)(((val*10)/127)*100);
   } else {
-    tmp = ((val*10)/128)*100;
+    tmp = (int16_t)(((val*10)/128)*100);
   }
   if (tmp<-1000) {
     tmp = -1000;
@@ -229,30 +230,30 @@ static int16_t scaleJoystickTo1K(int8_t val) {
 
 uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *data, RNWK_ShortAddrType srcAddr, bool *handled, RPHY_PacketDesc *packet) {
 #if PL_CONFIG_HAS_SHELL
-  uint8_t buf[48];
+	uint8_t buf[48];
 #endif
-  uint8_t val;
-  int16_t x, y, z;
-  
-  (void)size;
-  (void)packet;
-  switch(type) {
+	uint8_t val;
+	(void)srcAddr;
+	(void)size;
+	(void)packet;
+	switch(type) {
 #if PL_CONFIG_HAS_MOTOR
-    case RAPP_MSG_TYPE_JOYSTICK_XY: /* values are -128...127 */
-      {
+    	case RAPP_MSG_TYPE_JOYSTICK_XY: /* values are -128...127 */
+    	{
         int8_t x, y;
         int16_t x1000, y1000;
 
         *handled = TRUE;
-        x = *data; /* get x data value */
-        y = *(data+1); /* get y data value */
+        x = (int8_t)*data; /* get x data value */
+        y = (int8_t)*(data+1); /* get y data value */
+
         if (REMOTE_isVerbose) {
-          UTIL1_strcpy(buf, sizeof(buf), (unsigned char*)"x/y: ");
-          UTIL1_strcatNum8s(buf, sizeof(buf), (int8_t)x);
-          UTIL1_chcat(buf, sizeof(buf), ',');
-          UTIL1_strcatNum8s(buf, sizeof(buf), (int8_t)y);
-          UTIL1_strcat(buf, sizeof(buf), (unsigned char*)"\r\n");
-          SHELL_SendString(buf);
+			UTIL1_strcpy(buf, sizeof(buf), (unsigned char*)"x/y: ");
+			UTIL1_strcatNum8s(buf, sizeof(buf), (int8_t)x);
+			UTIL1_chcat(buf, sizeof(buf), ',');
+			UTIL1_strcatNum8s(buf, sizeof(buf), (int8_t)y);
+			UTIL1_strcat(buf, sizeof(buf), (unsigned char*)"\r\n");
+			SHELL_SendString(buf);
         }
   #if 0 /* using shell command */
         UTIL1_strcpy(buf, sizeof(buf), (unsigned char*)"motor L duty ");
@@ -278,43 +279,104 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
       break;
 #endif
     case RAPP_MSG_TYPE_JOYSTICK_BTN:
-      *handled = TRUE;
-      val = *data; /* get data value */
+    	*handled = TRUE;
+    	val = *data; /* get data value */
 #if PL_CONFIG_HAS_SHELL && PL_CONFIG_HAS_BUZZER && PL_CONFIG_HAS_REMOTE
-      if (val=='F') { /* F button, disable remote */
-        SHELL_ParseCmd((unsigned char*)"buzzer buz 300 500");
-        REMOTE_SetOnOff(FALSE);
-        DRV_SetSpeed(0,0); /* turn off motors */
-        SHELL_SendString("Remote OFF\r\n");
-      } else if (val=='G') { /* center joystick button: enable remote */
-        SHELL_ParseCmd((unsigned char*)"buzzer buz 300 1000");
-        REMOTE_SetOnOff(TRUE);
-        DRV_SetMode(DRV_MODE_SPEED);
-        SHELL_SendString("Remote ON\r\n");
-      } else if (val=='C') { /* red 'C' button */
-        /*! \todo add functionality */
-      } else if (val=='A') { /* green 'A' button */
-        /*! \todo add functionality */
-      }
+		if (val=='F') { /* F button, disable remote */
+			SHELL_ParseCmd((unsigned char*)"buzzer buz 300 500");
+			REMOTE_SetOnOff(FALSE);
+			DRV_SetSpeed(0,0); /* turn off motors */
+			SHELL_SendString("Remote OFF\r\n");
+		} else if (val=='C') { /* red 'C' button */
+			/*! \todo add functionality */
+		} else if (val=='A') { /* green 'A' button */
+			/*! \todo add functionality */
+		} else if (val=='G') { /* center joystick button: enable remote */
+			SHELL_ParseCmd((unsigned char*)"buzzer buz 300 1000");
+			REMOTE_SetOnOff(TRUE);
+			DRV_SetMode(DRV_MODE_SPEED);
+			SHELL_SendString((uint8_t*)"Remote ON\r\n");
+		}
 #else
-      *handled = FALSE; /* no shell and no buzzer? */
+		*handled = FALSE; /* no shell and no buzzer? */
 #endif
-      break;
+		break;
     case RAPP_MSG_TYPE_PLAY_TUNE:
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_SHELL && PL_CONFIG_HAS_BUZZER && PL_CONFIG_HAS_REMOTE
-    	if (val == '0') {
-    		SHELL_ParseCmd((unsigned char*)"buzzer play tune");
-    	}
-    	else if (val == '1') {
-    		SHELL_ParseCmd((uint8_t*)"buzzer play happy");
-    	}
+		if (val == '0') {
+			SHELL_ParseCmd((unsigned char*)"buzzer play tune");
+		}
+		else if (val == '1') {
+			SHELL_ParseCmd((uint8_t*)"buzzer play happy");
+		}
 #else
-      *handled = FALSE; /* no shell and no buzzer? */
+		*handled = FALSE; /* no shell and no buzzer? */
 #endif
+		break;
+    case RAPP_MSG_TYPE_INC_SPD:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_SetSpeed(100, 100);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_DEC_SPD:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_ChangeSpeed(-100, -100);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_INC_LEFT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_ChangeSpeed(-100, 0);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_INC_RIGHT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_ChangeSpeed(0, -100);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_TURN_RIGHT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_Mode actMode = DRV_GetMode();
+    	DRV_SetMode(DRV_MODE_POS);
+    	TURN_TurnAngle(90,NULL);
+    	DRV_SetMode(actMode);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_TURN_LEFT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	actMode = DRV_GetMode();
+    	DRV_SetMode(DRV_MODE_POS);
+    	TURN_TurnAngle(-90,NULL);
+    	DRV_SetMode(actMode);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
     default:
-      break;
+    	break;
   } /* switch */
   return ERR_OK;
 }

@@ -132,6 +132,15 @@ bool DRV_HasTurned(void) {
   return TRUE;
 }
 
+void DRV_ChangeSpeed(int32_t leftChange, int32_t rightChange) {
+	int32_t left, right;
+	right = TACHO_GetSpeed(FALSE);
+	left = TACHO_GetSpeed(TRUE);
+	left+=leftChange;
+	right+=rightChange;
+	DRV_SetSpeed(leftChange, rightChange);
+}
+
 DRV_Mode DRV_GetMode(void) {
   return DRV_Status.mode;
 }
