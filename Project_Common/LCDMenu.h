@@ -24,8 +24,14 @@ typedef enum {
   LCDMENU_EVENT_ENTER,
   LCDMENU_EVENT_ENTER_EDIT,  /* entering edit mode */
   LCDMENU_EVENT_EXIT_EDIT,   /* exiting edit mode */
-  LCDMENU_EVENT_INCREMENT,
-  LCDMENU_EVENT_DECREMENT,
+  LCDMENU_EVENT_DECREMENT,		//used for speed decrement
+  LCDMENU_EVENT_INCREMENT,		//used for speed increment
+  LCDMENU_EVENT_RIGHT_INC,		//used to increment turn right
+  LCDMENU_EVENT_LEFT_INC,		//used to increment turn left
+  LCDMENU_EVENT_INC_UP,		//used to increment turn right
+  LCDMENU_EVENT_DEC_DOWN,		//used to increment turn left
+  LCDMENU_EVENT_MIDDLE_SHORT,		//used to increment turn left
+  LCDMENU_EVENT_MIDDLE_LONG,		//used to increment turn left
 } LCDMenu_EventType;
 
 typedef enum {
@@ -38,7 +44,8 @@ typedef enum {
 typedef enum {
   LCDMENU_MENU_FLAGS_NONE         = 0,      /* default/initialization value */
   LCDMENU_MENU_FLAGS_EDITABLE     = (1<<0), /* editable data value */
-  LCDMENU_MENU_FLAGS_APPLICATION  = (2<<0),	/* Applications like drive robo or play games */
+  LCDMENU_MENU_FLAGS_DRIVEABLE	  = (2<<0),	/*Used to drive the robo*/
+  LCDMENU_MENU_FLAGS_APPLICATION  = (3<<0),	/* Applications like play games */
 } LCDMenu_MenuFlags;
 
 #define LCDMENU_ID_NONE     0   /* special menu ID for 'no' id */

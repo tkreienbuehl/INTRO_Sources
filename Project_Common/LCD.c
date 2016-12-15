@@ -72,6 +72,34 @@ static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *it
   return flags;
 }
 
+static LCDMenu_StatusFlags DriveHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+  static int value = 0;
+  static uint8_t valueBuf[16];
+  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+  (void)item;
+  if (event==LCDMENU_EVENT_GET_TEXT) {
+    UTIL1_strcpy(valueBuf, sizeof(valueBuf), (uint8_t*)"Val: ");
+    UTIL1_strcatNum32s(valueBuf, sizeof(valueBuf), value);
+    *dataP = valueBuf;
+    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+  } else if (event==LCDMENU_EVENT_INC_UP) {
+
+    *dataP = valueBuf;
+    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+  } else if (event==LCDMENU_EVENT_DEC_DOWN) {
+	  (void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_DEC_SPD, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+  } else if (event==LCDMENU_EVENT_LEFT_INC) {
+
+    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+  }else if (event==LCDMENU_EVENT_RIGHT_INC) {
+
+      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+    }
+  return flags;
+}
+
 static LCDMenu_StatusFlags BackLightMenuHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
   LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
 
@@ -121,7 +149,7 @@ static const LCDMenu_MenuItem menus[] =
     	{LCD_MENU_ID_BACKLIGHT,		1,	0,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	BackLightMenuHandler,       LCDMENU_MENU_FLAGS_NONE},
     	{LCD_MENU_ID_NUM_VALUE,		1,	1,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	ValueChangeHandler,         LCDMENU_MENU_FLAGS_EDITABLE},
 	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,		LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_NONE},
-		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			"Drive Herbie",		NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_DRIVEABLE},
 		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_HAPPY,4,	1,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
