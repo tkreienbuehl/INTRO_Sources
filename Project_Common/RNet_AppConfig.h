@@ -21,6 +21,14 @@ typedef enum {
   RAPP_MSG_TYPE_DATA = 0x04,
   RAPP_MSG_TYPE_JOYSTICK_XY = 0x05,
   RAPP_MSG_TYPE_PLAY_TUNE = 0x06,
+  RAPP_MSG_TYPE_INC_SPD = 0x07,
+  RAPP_MSG_TYPE_DEC_SPD = 0x08,
+  RAPP_MSG_TYPE_ZERO_DIR = 0x09,
+  RAPP_MSG_TYPE_INC_LEFT = 0x10,
+  RAPP_MSG_TYPE_TRUN_LEFT = 0x11,
+  RAPP_MSG_TYPE_TURN_RIGHT = 0x12,
+  RAPP_MSG_TYPE_STOP = 0x13,
+  RAPP_MSG_TYPE_EXIT_STOP = 0x14,
   RAPP_MSG_TYPE_JOYSTICK_BTN = 0x54, /* Joystick button message (data is one byte: 'A', 'B', ... 'F' and 'K') */
   /* \todo extend with your own messages */
 } RAPP_MSG_Type;
