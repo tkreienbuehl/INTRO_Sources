@@ -319,7 +319,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_SetSpeed(100, 100);
+    	DRV_SetSpeed(500, 500);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -328,7 +328,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-100, -100);
+    	DRV_ChangeSpeed(-500, -500);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -337,7 +337,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-100, 0);
+    	DRV_ChangeSpeed(-500, 0);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -346,7 +346,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(0, -100);
+    	DRV_ChangeSpeed(0, -500);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
