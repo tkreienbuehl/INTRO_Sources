@@ -25,6 +25,7 @@
 #endif
 #if PL_CONFIG_HAS_DRIVE
   #include "Drive.h"
+  #include "Turn.h"
 #endif
 #if PL_CONFIG_HAS_LEDS
   #include "LED.h"
@@ -318,12 +319,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	int32_t left, right;
-    	right = TACHO_GetSpeed(FALSE);
-    	left = TACHO_GetSpeed(TRUE);
-    	left+=100;
-    	right+=100;
-    	DRV_SetSpeed(left, right);
+    	DRV_SetSpeed(100, 100);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -332,7 +328,49 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed()(left, right);
+    	DRV_ChangeSpeed(-100, -100);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_INC_LEFT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_ChangeSpeed(-100, 0);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_INC_RIGHT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_ChangeSpeed(0, -100);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_TURN_RIGHT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_Mode actMode = DRV_GetMode();
+    	DRV_SetMode(DRV_MODE_POS);
+    	TURN_TurnAngle(90,NULL);
+    	DRV_SetMode(actMode);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_TURN_LEFT:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	actMode = DRV_GetMode();
+    	DRV_SetMode(DRV_MODE_POS);
+    	TURN_TurnAngle(-90,NULL);
+    	DRV_SetMode(actMode);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
