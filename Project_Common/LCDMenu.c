@@ -312,7 +312,7 @@ static void LCDMenu_CursorEnter(void) {
       }
     }
     else if((item->flags&LCDMENU_MENU_FLAGS_DRIVEABLE) && menuStatus.editID==menuStatus.selectedID){
-        	flags |= item->handler(item, LCDMENU_EVENT_MIDDLE_SHORT, NULL); /* send edit event */
+        flags |= item->handler(item, LCDMENU_EVENT_MIDDLE_SHORT, NULL); /* send edit event */
     }
     if (flags&LCDMENU_STATUS_FLAGS_UPDATE_VIEW) { /* redraw needed? */
       LCDMenu_OnEvent(LCDMENU_EVENT_DRAW, item); /* entered edit mode, redraw menu */

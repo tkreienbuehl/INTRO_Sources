@@ -27,6 +27,7 @@
 /* status variables */
 static bool LedBackLightisOn = TRUE;
 static bool requestLCDUpdate = FALSE;
+static bool isInAppMode = FALSE;
 
 #if PL_CONFIG_HAS_LCD_MENU
 typedef enum {
@@ -99,8 +100,14 @@ static LCDMenu_StatusFlags DriveHandler(const struct LCDMenu_MenuItem_ *item, LC
       flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
     }
   else if (event==LCDMENU_EVENT_ENTER) { /* toggle setting */
-      // TODO SET A
-      flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW|LCDMENU_MENU_FLAGS_DRIVEABLE;
+	  if (isInAppMode) {
+		  // TODO SET A
+		  flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }
+	  else {
+		  isInAppMode = TRUE;
+		  flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	  }
     }
   return flags;
 }
@@ -153,7 +160,7 @@ static const LCDMenu_MenuItem menus[] =
     {LCD_MENU_ID_MAIN,				0,	0,	LCD_MENU_ID_NONE,       LCD_MENU_ID_BACKLIGHT,		"Remote Settings",  NULL,                       LCDMENU_MENU_FLAGS_NONE},
     	{LCD_MENU_ID_BACKLIGHT,		1,	0,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	BackLightMenuHandler,       LCDMENU_MENU_FLAGS_NONE},
     	{LCD_MENU_ID_NUM_VALUE,		1,	1,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	ValueChangeHandler,         LCDMENU_MENU_FLAGS_EDITABLE},
-	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,		LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_NONE},
+	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,		LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_DRIVEABLE},
 		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				DriveHandler,				LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
@@ -367,32 +374,63 @@ static void LCD_Task(void *param) {
     }
 #if 1 /*! \todo Change this to for your own needs, or use direct task notification */
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
-      LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
-      //ShowTextOnLCD("left");
+    	if (isInAppMode) {
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_LEFT, RNETA_GetDestAddr(), 0L);
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
+    	}
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
-      LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
-      //ShowTextOnLCD("right");
+    	if (isInAppMode) {
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_RIGHT, RNETA_GetDestAddr(), 0L);
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
+    	}
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
-      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
-      //ShowTextOnLCD("up");
+    	if (isInAppMode) {
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_SPD, RNETA_GetDestAddr(), 0L);
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+    	}
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
-      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
-      //ShowTextOnLCD("down");
+    	if (isInAppMode) {
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_DEC_SPD, RNETA_GetDestAddr(), 0L);
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+    	}
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
-      LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+    	if (isInAppMode) {
+
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+    	}
       //(void)RAPP_SendPayloadDataBlock((uint8_t*)"F", sizeof("F")-1, RAPP_MSG_TYPE_JOYSTICK_BTN, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
-      //ShowTextOnLCD("center");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
-      LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+    	if (isInAppMode) {
+
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+    	}
       //ShowTextOnLCD("side up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
-      LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+    	if (isInAppMode) {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+    		isInAppMode = FALSE;
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
+    	}
       //ShowTextOnLCD("side down");
     }
 #endif
