@@ -40,6 +40,8 @@ DRV_Mode DRV_GetMode(void);
 bool DRV_IsStopped(void);
 bool DRV_HasTurned(void);
 
+void DRV_ChangeSpeed(int32_t leftChange, int32_t rightChange);
+
 /*!
  * \brief Stops the engines
  * \param timoutMs timout in milliseconds for operation
