@@ -319,7 +319,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_SetSpeed(500, 500);
+    	DRV_ChangeSpeed(500, 500);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -337,7 +337,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-500, 0);
+    	DRV_ChangeSpeed(-125, 125);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -346,7 +346,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(0, -500);
+    	DRV_ChangeSpeed(125, -125);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -358,6 +358,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	DRV_Mode actMode = DRV_GetMode();
     	DRV_SetMode(DRV_MODE_POS);
     	TURN_TurnAngle(90,NULL);
+    	FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
     	DRV_SetMode(actMode);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
@@ -370,7 +371,35 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	actMode = DRV_GetMode();
     	DRV_SetMode(DRV_MODE_POS);
     	TURN_TurnAngle(-90,NULL);
+    	FRTOS1_vTaskDelay(pdMS_TO_TICKS(100));
     	DRV_SetMode(actMode);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_START_DRIVE:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_SetMode(DRV_MODE_SPEED);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_ZERO_DIR:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_SetBackToStraight();
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_STOP:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	DRV_SetSpeed(0,0);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif

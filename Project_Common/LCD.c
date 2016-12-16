@@ -80,7 +80,11 @@ static LCDMenu_StatusFlags DriveHandler(const struct LCDMenu_MenuItem_ *item, LC
 
   (void)item;
   if (event==LCDMENU_EVENT_GET_TEXT) {
-	  *dataP = "Drive Herbie";
+	  if (!isInAppMode) {
+		  *dataP = "Drive Herbie";
+	  } else {
+		  *dataP = "<Driving>";
+	  }
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
   }
   else if (event==LCDMENU_EVENT_INC_UP) {
@@ -408,16 +412,24 @@ static void LCD_Task(void *param) {
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
     	if (isInAppMode) {
-
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_ZERO_DIR, RNETA_GetDestAddr(), 0L);
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
     	}
-      //(void)RAPP_SendPayloadDataBlock((uint8_t*)"F", sizeof("F")-1, RAPP_MSG_TYPE_JOYSTICK_BTN, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
     	if (isInAppMode) {
-
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_LEFT, RNETA_GetDestAddr(), 0L);
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+    	}
+      //ShowTextOnLCD("side up");
+    }
+    if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP_LONG)) { /* side up long pressed*/
+    	if (isInAppMode) {
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_STOP, RNETA_GetDestAddr(), 0L);
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
@@ -425,6 +437,15 @@ static void LCD_Task(void *param) {
       //ShowTextOnLCD("side up");
     }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
+    	if (isInAppMode) {
+    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_RIGHT, RNETA_GetDestAddr(), 0L);
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
+    	}
+      //ShowTextOnLCD("side up");
+    }
+    if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN_LONG)) { /* side down long pressed*/
     	if (isInAppMode) {
     		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
     		isInAppMode = FALSE;

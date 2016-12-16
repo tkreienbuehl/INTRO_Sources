@@ -41,6 +41,7 @@ bool DRV_IsStopped(void);
 bool DRV_HasTurned(void);
 
 void DRV_ChangeSpeed(int32_t leftChange, int32_t rightChange);
+void DRV_SetBackToStraight(void);
 
 /*!
  * \brief Stops the engines
