@@ -13,6 +13,7 @@
 #include "Platform.h"
 #if PL_CONFIG_HAS_RADIO
 /*! type ID's for application messages */
+#define ADDRESS_SIGNALS	(0x12)
 typedef enum {
   RAPP_MSG_TYPE_STDIN = 0x00,
   RAPP_MSG_TYPE_STDOUT = 0x01,
@@ -31,9 +32,11 @@ typedef enum {
   RAPP_MSG_TYPE_STOP = 0x14,
   RAPP_MSG_TYPE_EXIT_STOP = 0x15,
   RAPP_MSG_TYPE_START_DRIVE = 0x16,
+  RAPP_MSG_TYPE_SIGNALS = 32,
   RAPP_MSG_TYPE_JOYSTICK_BTN = 0x54, /* Joystick button message (data is one byte: 'A', 'B', ... 'F' and 'K') */
   /* \todo extend with your own messages */
 } RAPP_MSG_Type;
+
 
 #endif /* PL_CONFIG_HAS_RADIO */
 

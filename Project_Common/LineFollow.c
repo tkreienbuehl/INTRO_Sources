@@ -30,6 +30,8 @@
 #if PL_CONFIG_HAS_LINE_MAZE
   #include "Maze.h"
 #endif
+#include "RNet_AppConfig.h"
+#include "RPHY.h"
 
 typedef enum {
   STATE_IDLE,              /* idle, not doing anything */
@@ -96,6 +98,7 @@ static void StateMachine(void) {
       if (lineKind == REF_LINE_FULL) {
         LF_currState = STATE_STOP; /* stop if we do not have a line any more */
         SHELL_SendString((unsigned char*)"No line, stopped!\r\n");
+        (void)RAPP_SendPayloadDataBlock((uint8_t*)"C", sizeof("C")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
       }
       else if (lineKind == REF_LINE_NONE) {
 		LF_currState = STATE_TURN; /* make turn */
@@ -159,13 +162,15 @@ static void LineTask (void *pvParameters) {
     if (notifcationValue&LF_STOP_FOLLOWING) {
       LF_currState = STATE_STOP;
     }
-    if(LF_currState==STATE_IDLE && !alreadyStarted){
+    //if(LF_currState==STATE_IDLE && !alreadyStarted){
+    if(LF_currState==STATE_IDLE && DRV_GetMode()==DRV_MODE_SPEED){
     	  REF_LineKind currLineKind;
     	  currLineKind = REF_GetLineKind();
     	  if(currLineKind==REF_LINE_FULL){
     		  //Todo Send signal B
     		  LF_currState=STATE_TURN;	//start fine state
     		  alreadyStarted=true;
+    		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"B", sizeof("B")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
     	  }
     }
     StateMachine();
