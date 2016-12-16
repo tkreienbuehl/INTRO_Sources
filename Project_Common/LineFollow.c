@@ -80,7 +80,7 @@ static REF_LineKind FollowSegment(void) {
 
   currLine = REF_GetLineValue();
   currLineKind = REF_GetLineKind();
-  if (currLineKind==REF_LINE_STRAIGHT) {
+  if (currLineKind==REF_LINE_STRAIGHT ||currLineKind==REF_LINE_LEFT||currLineKind==REF_LINE_RIGHT) {
     PID_Line(currLine, REF_MIDDLE_LINE_VALUE); /* move along the line */
   }
   return currLineKind;
@@ -102,12 +102,12 @@ static void StateMachine(void) {
 		SHELL_SendString((unsigned char*)"no line, turn..\r\n");
       }
       else if (lineKind == REF_LINE_LEFT) {
-		LF_currState = STATE_LINE_LEFT; /* make turn */
-		SHELL_SendString((unsigned char*)"line left, turn..\r\n");
+		//LF_currState = STATE_LINE_LEFT; /* make turn */
+		//SHELL_SendString((unsigned char*)"line left, turn..\r\n");
       }
       else if (lineKind == REF_LINE_RIGHT) {
-		LF_currState = STATE_LINE_RIGHT; /* make turn */
-		SHELL_SendString((unsigned char*)"line right, turn..\r\n");
+		//LF_currState = STATE_LINE_RIGHT; /* make turn */
+		//SHELL_SendString((unsigned char*)"line right, turn..\r\n");
       }
       break;
     case STATE_LINE_LEFT:
@@ -146,6 +146,7 @@ bool LF_IsFollowing(void) {
 
 static void LineTask (void *pvParameters) {
   uint32_t notifcationValue;
+  static bool alreadyStarted=false;
 
   (void)pvParameters; /* not used */
   for(;;) {
@@ -157,6 +158,15 @@ static void LineTask (void *pvParameters) {
     }
     if (notifcationValue&LF_STOP_FOLLOWING) {
       LF_currState = STATE_STOP;
+    }
+    if(LF_currState==STATE_IDLE && !alreadyStarted){
+    	  REF_LineKind currLineKind;
+    	  currLineKind = REF_GetLineKind();
+    	  if(currLineKind==REF_LINE_FULL){
+    		  //Todo Send signal B
+    		  LF_currState=STATE_TURN;	//start fine state
+    		  alreadyStarted=true;
+    	  }
     }
     StateMachine();
     FRTOS1_vTaskDelay(5/portTICK_PERIOD_MS);

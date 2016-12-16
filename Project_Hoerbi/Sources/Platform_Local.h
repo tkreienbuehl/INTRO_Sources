@@ -88,7 +88,7 @@
 #define PL_LINE_FOLLOW_I_FACTOR100           50
 #define PL_LINE_FOLLOW_D_FACTOR100           0
 #define PL_LINE_FOLLOW_I_ANTI_WINDUP         5000
-#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     60				  /* max allowed speed in percent in line following mode*/
+#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     40				  /* max allowed speed in percent in line following mode*/
 
 #define PL_POS_LEFT_P_FACTOR100              250
 #define PL_POS_LEFT_I_FACTOR100              0
