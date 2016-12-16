@@ -53,6 +53,11 @@ static xTaskHandle LFTaskHandle;
 static uint8_t LF_solvedIdx = 0; /*  index to iterate through the solution, zero is the solution start index */
 #endif
 
+static bool enableAutoTurn=false;
+
+void LF_enableAutoTurn(bool enable){
+	enableAutoTurn=enable;
+}
 void LF_StartFollowing(void) {
   (void)xTaskNotify(LFTaskHandle, LF_START_FOLLOWING, eSetBits);
 }
@@ -163,14 +168,15 @@ static void LineTask (void *pvParameters) {
       LF_currState = STATE_STOP;
     }
     //if(LF_currState==STATE_IDLE && !alreadyStarted){
-    if(LF_currState==STATE_IDLE && DRV_GetMode()==DRV_MODE_SPEED){
+    if(LF_currState==STATE_IDLE && DRV_GetMode()==DRV_MODE_SPEED && enableAutoTurn){
     	  REF_LineKind currLineKind;
     	  currLineKind = REF_GetLineKind();
     	  if(currLineKind==REF_LINE_FULL){
     		  //Todo Send signal B
+    		  PID_Start();
+    		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"B", sizeof("B")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
     		  LF_currState=STATE_TURN;	//start fine state
     		  alreadyStarted=true;
-    		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"B", sizeof("B")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
     	  }
     }
     StateMachine();

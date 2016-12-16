@@ -17,6 +17,7 @@
 
 uint8_t LF_ParseCommand(const unsigned char *cmd, bool *handled, const CLS1_StdIOType *io);
 #endif
+void LF_enableAutoTurn(bool enable);
 
 void LF_StartFollowing(void);
 void LF_StopFollowing(void);
