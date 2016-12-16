@@ -430,6 +430,22 @@ static void LCD_Task(void *param) {
     		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
     	}
     }
+    if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER_LONG)) { /* center */
+    	if (isInAppMode) {
+    		if (searchStartField) {
+    			(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_SEARCH_START, RNETA_GetDestAddr(), 0L);
+    			ShowTextOnLCD((uint8_t*)"<driving> \nstart searching\nstart field");
+    		}
+    		else {
+    			(void)RAPP_SendPayloadDataBlock((uint8_t*)"1", sizeof("1")-1, RAPP_MSG_TYPE_SEARCH_START, RNETA_GetDestAddr(), 0L);
+    			ShowTextOnLCD((uint8_t*)"<driving> \nstop searching\nstart field");
+    		}
+    		searchStartField = !searchStartField;
+    	}
+    	else {
+    		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
+    	}
+    }
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_LEFT, RNETA_GetDestAddr(), 0L);
