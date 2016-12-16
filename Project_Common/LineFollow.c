@@ -132,6 +132,7 @@ static void StateMachine(void) {
     	TURN_TurnAngle(180,NULL);
     	(void)DRV_SetMode(DRV_MODE_NONE);
     	LF_currState=STATE_FOLLOW_SEGMENT;
+    	FRTOS1_vTaskDelay(200/portTICK_PERIOD_MS);
       break;
 
     case STATE_FINISHED:
@@ -172,9 +173,12 @@ static void LineTask (void *pvParameters) {
     if(LF_currState==STATE_IDLE && enableAutoTurn){
     	REF_LineKind currLineKind;
     	  currLineKind = REF_GetLineKind();
+    	  SHELL_SendString("Line full?!\r\n");
     	  if(currLineKind==REF_LINE_FULL){
     		  //Todo Send signal B
+    		  SHELL_SendString("Activatet Line Follow!\r\n");
     		  PID_Start();
+    		  enableAutoTurn=false;
     		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"B", sizeof("B")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
     		  LF_currState=STATE_TURN;	//start fine state
     	  }
