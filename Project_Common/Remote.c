@@ -26,6 +26,7 @@
 #if PL_CONFIG_HAS_DRIVE
   #include "Drive.h"
   #include "Turn.h"
+  #include "LineFollow.h"
 #endif
 #if PL_CONFIG_HAS_LEDS
   #include "LED.h"
@@ -295,6 +296,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
 			SHELL_ParseCmd((unsigned char*)"buzzer buz 300 1000");
 			REMOTE_SetOnOff(TRUE);
 			DRV_SetMode(DRV_MODE_SPEED);
+			DRV_SetSpeed(0,0);
 			SHELL_SendString((uint8_t*)"Remote ON\r\n");
 		}
 #else
@@ -382,6 +384,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
     	DRV_SetMode(DRV_MODE_SPEED);
+    	DRV_SetSpeed(0,0);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -409,10 +412,10 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
     	if (val == '0') {
-
+    		LF_enableAutoTurn(false);
     	}
     	else if (val == '1') {
-
+    		LF_enableAutoTurn(true);
     	}
 #else
 		*handled = FALSE; /* no shell and no buzzer? */

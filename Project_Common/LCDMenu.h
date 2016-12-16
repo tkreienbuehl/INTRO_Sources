@@ -30,8 +30,8 @@ typedef enum {
   LCDMENU_EVENT_LEFT_INC,		//used to increment turn left
   LCDMENU_EVENT_INC_UP,		//used to increment turn right
   LCDMENU_EVENT_DEC_DOWN,		//used to increment turn left
-  LCDMENU_EVENT_MIDDLE_SHORT,		//used to increment turn left
-  LCDMENU_EVENT_MIDDLE_LONG,		//used to increment turn left
+  LCDMENU_EVENT_MIDDLE_SHORT,
+  LCDMENU_EVENT_MIDDLE_LONG,
 } LCDMenu_EventType;
 
 typedef enum {
