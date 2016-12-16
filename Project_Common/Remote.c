@@ -404,6 +404,20 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
 		break;
+    case RAPP_MSG_TYPE_SEARCH_START:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	if (val == '0') {
+
+    	}
+    	else if (val == '1') {
+
+    	}
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
     default:
     	break;
   } /* switch */

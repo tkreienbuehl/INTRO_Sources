@@ -28,6 +28,7 @@
 static bool LedBackLightisOn = TRUE;
 static bool requestLCDUpdate = FALSE;
 static bool isInAppMode = FALSE;
+static bool searchStartField = FALSE;
 
 #if PL_CONFIG_HAS_LCD_MENU
 typedef enum {
@@ -41,10 +42,21 @@ typedef enum {
 	LCD_MENU_ID_PLAY_TUNE,
 	LCD_MENU_ID_PLAY_HAPPY,
 	LCD_MENU_ID_ROBO_SETTINGS,
+	LCD_MENU_ID_SEARCH_START,
 	LCD_MENU_ID_GAMES,
 	LCD_MENU_ID_TETRIS,
 	LCD_MENU_ID_SNAKE,
 } LCD_MenuIDs;
+
+static void ShowTextOnLCD(unsigned char *text) {
+  FDisp1_PixelDim x, y;
+
+  GDisp1_Clear();
+  x = 0;
+  y = 10;
+  FDisp1_WriteString(text, GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
+  GDisp1_UpdateFull();
+}
 
 static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
   static int value = 0;
@@ -74,22 +86,25 @@ static LCDMenu_StatusFlags ValueChangeHandler(const struct LCDMenu_MenuItem_ *it
 }
 
 static LCDMenu_StatusFlags DriveHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
-	static int value = 0;
-	static uint8_t valueBuf[16];
 	LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
 
 	(void)item;
 	if (event==LCDMENU_EVENT_GET_TEXT) {
 		if (!isInAppMode) {
 		  *dataP = "Drive Herbie";
+		  flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 		}
-		flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+		else {
+			ShowTextOnLCD((uint8_t*)"<driving> \nready");
+			flags |= LCDMENU_STATUS_FLAGS_HANDLED;
+		}
 	}
 	else {
-		flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+		flags |= LCDMENU_STATUS_FLAGS_HANDLED;
 	}
-	if (event==LCDMENU_EVENT_ENTER) {
+	if (event==LCDMENU_EVENT_ENTER && !isInAppMode) {
 		isInAppMode = TRUE;
+		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_START_DRIVE, RNETA_GetDestAddr(), 0L);
 	}
   return flags;
 }
@@ -107,6 +122,30 @@ static LCDMenu_StatusFlags BackLightMenuHandler(const struct LCDMenu_MenuItem_ *
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
   } else if (event==LCDMENU_EVENT_ENTER) { /* toggle setting */
     LedBackLightisOn = !LedBackLightisOn;
+    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+  }
+  return flags;
+}
+
+static LCDMenu_StatusFlags StartSearchMenuHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+  LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+
+  (void)item;
+  if (event==LCDMENU_EVENT_GET_TEXT && dataP!=NULL) {
+    if (searchStartField) {
+    	*dataP = "src start on";
+    } else {
+    	*dataP = "src start off";
+    }
+    flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+  } else if (event==LCDMENU_EVENT_ENTER) { /* toggle setting */
+   	searchStartField = !searchStartField;
+   	if (searchStartField) {
+   		(void)RAPP_SendPayloadDataBlock((uint8_t*)"1", sizeof("1")-1, RAPP_MSG_TYPE_SEARCH_START, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+   	}
+   	else {
+   		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_SEARCH_START, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+   	}
     flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
   }
   return flags;
@@ -138,16 +177,17 @@ static LCDMenu_StatusFlags PlayMusicMenuHandler(const struct LCDMenu_MenuItem_ *
 }
 
 static const LCDMenu_MenuItem menus[] =
-{/* id,								grp,pos,up,						down,						text,				callback					flags                  */
-    {LCD_MENU_ID_MAIN,				0,	0,	LCD_MENU_ID_NONE,       LCD_MENU_ID_BACKLIGHT,		"Remote Settings",  NULL,                       LCDMENU_MENU_FLAGS_NONE},
-    	{LCD_MENU_ID_BACKLIGHT,		1,	0,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	BackLightMenuHandler,       LCDMENU_MENU_FLAGS_NONE},
-    	{LCD_MENU_ID_NUM_VALUE,		1,	1,	LCD_MENU_ID_MAIN,       LCD_MENU_ID_NONE,			NULL,           	ValueChangeHandler,         LCDMENU_MENU_FLAGS_EDITABLE},
-	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,		LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_DRIVEABLE},
-		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				DriveHandler,				LCDMENU_MENU_FLAGS_NONE},
-		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
-			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
-			{LCD_MENU_ID_PLAY_HAPPY,4,	1,	LCD_MENU_ID_ROBO_MUSIC,	LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
-		{LCD_MENU_ID_ROBO_SETTINGS,	2,	2,	LCD_MENU_ID_ROBO_MAIN,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_NONE},
+{/* id,								grp,pos,up,							down,						text,				callback					flags                  */
+    {LCD_MENU_ID_MAIN,				0,	0,	LCD_MENU_ID_NONE,       	LCD_MENU_ID_BACKLIGHT,		"Remote Settings",  NULL,                       LCDMENU_MENU_FLAGS_NONE},
+    	{LCD_MENU_ID_BACKLIGHT,		1,	0,	LCD_MENU_ID_MAIN,       	LCD_MENU_ID_NONE,			NULL,           	BackLightMenuHandler,       LCDMENU_MENU_FLAGS_NONE},
+    	{LCD_MENU_ID_NUM_VALUE,		1,	1,	LCD_MENU_ID_MAIN,       	LCD_MENU_ID_NONE,			NULL,           	ValueChangeHandler,         LCDMENU_MENU_FLAGS_EDITABLE},
+	{LCD_MENU_ID_ROBO_MAIN,			0,	1,	LCD_MENU_ID_NONE,			LCD_MENU_ID_ROBO_DRIVE,		"Herbie menu",      NULL,						LCDMENU_MENU_FLAGS_DRIVEABLE},
+		{LCD_MENU_ID_ROBO_DRIVE,	2,	0,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_NONE,			NULL,				DriveHandler,				LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,		LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
+			{LCD_MENU_ID_PLAY_HAPPY,4,	1,	LCD_MENU_ID_ROBO_MUSIC,		LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_SETTINGS,	2,	2,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_SEARCH_START,	"settings",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_SEARCH_START,	5,	0,	LCD_MENU_ID_ROBO_SETTINGS,	LCD_MENU_ID_NONE,			NULL,				StartSearchMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
 	{LCD_MENU_ID_GAMES,				0,	2,	LCD_MENU_ID_NONE,		LCD_MENU_ID_TETRIS,			"Games",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_TETRIS,		3,	0,	LCD_MENU_ID_GAMES,		LCD_MENU_ID_NONE,			"Tetris",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_SNAKE,			3,	1,	LCD_MENU_ID_GAMES,		LCD_MENU_ID_NONE,			"Snake",			NULL,						LCDMENU_MENU_FLAGS_NONE},
@@ -242,16 +282,6 @@ static void DrawFont(void) {
 }
 
 */
-
-static void ShowTextOnLCD(unsigned char *text) {
-  FDisp1_PixelDim x, y;
-
-  GDisp1_Clear();
-  x = 0;
-  y = 10;
-  FDisp1_WriteString(text, GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
-  GDisp1_UpdateFull();
-}
 
 static void drawWheel(GDisp1_PixelDim x, GDisp1_PixelDim y, uint8_t idx) {
 
@@ -358,7 +388,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_LEFT)) { /* left */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_LEFT, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving> \nturn left");
+    		ShowTextOnLCD((uint8_t*)"<driving> \nturn left");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_LEFT, NULL);
@@ -367,7 +397,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_RIGHT)) { /* right */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_RIGHT, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving> \nturn right");
+    		ShowTextOnLCD((uint8_t*)"<driving> \nturn right");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_RIGHT, NULL);
@@ -376,7 +406,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_UP)) { /* up */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_SPD, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving>");
+    		ShowTextOnLCD((uint8_t*)"<driving>");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
@@ -385,7 +415,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_DOWN)) { /* down */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_DEC_SPD, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving>");
+    		ShowTextOnLCD((uint8_t*)"<driving>");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_DOWN, NULL);
@@ -394,7 +424,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_BTN_CENTER)) { /* center */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_ZERO_DIR, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving> \nstraight");
+    		ShowTextOnLCD((uint8_t*)"<driving> \nstraight");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_ENTER, NULL);
@@ -403,7 +433,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP)) { /* side up */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_LEFT, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving> \nturn 90°");
+    		ShowTextOnLCD((uint8_t*)"<driving> \nturn 90 deg");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
@@ -412,7 +442,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_UP_LONG)) { /* side up long pressed*/
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_STOP, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving> \nstopped");
+    		ShowTextOnLCD((uint8_t*)"<driving> \nstopped");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
@@ -421,7 +451,7 @@ static void LCD_Task(void *param) {
     if (EVNT_EventIsSetAutoClear(EVNT_LCD_SIDE_BTN_DOWN)) { /* side down */
     	if (isInAppMode) {
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_RIGHT, RNETA_GetDestAddr(), 0L);
-    		ShowTextOnLCD("<driving> \nturn 90°");
+    		ShowTextOnLCD((uint8_t*)"<driving> \nturn 90 deg");
     	}
     	else {
     		LCDMenu_OnEvent(LCDMENU_EVENT_UP, NULL);
