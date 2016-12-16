@@ -53,7 +53,7 @@ static xTaskHandle LFTaskHandle;
 static uint8_t LF_solvedIdx = 0; /*  index to iterate through the solution, zero is the solution start index */
 #endif
 
-static bool enableAutoTurn=false;
+static volatile bool enableAutoTurn=false;
 
 void LF_enableAutoTurn(bool enable){
 	enableAutoTurn=enable;
@@ -137,6 +137,7 @@ static void StateMachine(void) {
     case STATE_FINISHED:
         LF_currState = STATE_STOP; /* stop if we do not have a line any more */
         SHELL_SendString((unsigned char*)"No line, finished!\r\n");
+        LF_enableAutoTurn(false);
       break;
     case STATE_STOP:
       SHELL_SendString("Stopped!\r\n");
@@ -154,7 +155,6 @@ bool LF_IsFollowing(void) {
 
 static void LineTask (void *pvParameters) {
   uint32_t notifcationValue;
-  static bool alreadyStarted=false;
 
   (void)pvParameters; /* not used */
   for(;;) {
@@ -168,15 +168,15 @@ static void LineTask (void *pvParameters) {
       LF_currState = STATE_STOP;
     }
     //if(LF_currState==STATE_IDLE && !alreadyStarted){
-    if(LF_currState==STATE_IDLE && DRV_GetMode()==DRV_MODE_SPEED && enableAutoTurn){
-    	  REF_LineKind currLineKind;
+    //if(LF_currState==STATE_IDLE && DRV_GetMode()==DRV_MODE_SPEED && enableAutoTurn){
+    if(LF_currState==STATE_IDLE && enableAutoTurn){
+    	REF_LineKind currLineKind;
     	  currLineKind = REF_GetLineKind();
     	  if(currLineKind==REF_LINE_FULL){
     		  //Todo Send signal B
     		  PID_Start();
     		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"B", sizeof("B")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
     		  LF_currState=STATE_TURN;	//start fine state
-    		  alreadyStarted=true;
     	  }
     }
     StateMachine();
