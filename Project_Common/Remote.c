@@ -27,6 +27,7 @@
   #include "Drive.h"
   #include "Turn.h"
   #include "LineFollow.h"
+  #include "Reflectance.h"
 #endif
 #if PL_CONFIG_HAS_LEDS
   #include "LED.h"
@@ -321,7 +322,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(500, 500);
+    	DRV_ChangeSpeed(300, 300);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -330,7 +331,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-500, -500);
+    	DRV_ChangeSpeed(-300, -300);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -339,7 +340,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-125, 125);
+    	DRV_ChangeSpeed(-200, 200);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -348,7 +349,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(125, -125);
+    	DRV_ChangeSpeed(200, -200);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -388,6 +389,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	uint8_t buf[2];
     	buf[0] = 2;
     	buf[1] = 'A';
+    	FRTOS1_vTaskDelay(pdMS_TO_TICKS(30));
     	(void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
@@ -424,6 +426,15 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     		speed = TACHO_GetSpeed(FALSE);
     		(void)RAPP_SendPayloadDataBlock((uint8_t*)"R", sizeof("R")-1, RAPP_MSG_TYPE_SEND_SPEED, RNETA_GetDestAddr(), 0L);
     	}
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_CALIB_LINE:
+    	*handled = true;
+    	val = *data; /* get data value */
+#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
+    	REF_CalibrateStartStop();
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif

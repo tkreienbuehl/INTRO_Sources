@@ -136,6 +136,14 @@ void DRV_ChangeSpeed(int32_t leftChange, int32_t rightChange) {
 	int32_t left, right;
 	right = DRV_Status.speed.right;
 	left = DRV_Status.speed.left;
+	if (left == right && left == 0) {
+		if (leftChange == rightChange && leftChange < 0) {
+			left = right = -500;
+		}
+		else if (leftChange == rightChange && leftChange > 0) {
+			left = right = 500;
+		}
+	}
 	left+=leftChange;
 	right+=rightChange;
 	(void)DRV_SetSpeed(left, right);

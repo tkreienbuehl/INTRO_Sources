@@ -40,7 +40,7 @@ typedef enum {
 	LCD_MENU_ID_PLAY_TUNE,
 	LCD_MENU_ID_PLAY_HAPPY,
 	LCD_MENU_ID_ROBO_SETTINGS,
-	LCD_MENU_ID_SEARCH_START,
+	LCD_MENU_ID_CALIB_LINE,
 	LCD_MENU_ID_GAMES,
 	LCD_MENU_ID_TETRIS,
 	LCD_MENU_ID_SNAKE,
@@ -143,6 +143,33 @@ static LCDMenu_StatusFlags PlayMusicMenuHandler(const struct LCDMenu_MenuItem_ *
 	return flags;
 }
 
+//LineCalibMenuHandler
+static LCDMenu_StatusFlags LineCalibMenuHandler(const struct LCDMenu_MenuItem_ *item, LCDMenu_EventType event, void **dataP) {
+	LCDMenu_StatusFlags flags = LCDMENU_STATUS_FLAGS_NONE;
+	static bool isCalibMode = FALSE;
+	(void)item;
+
+	if (event==LCDMENU_EVENT_GET_TEXT) {
+		if (isCalibMode) {
+			*dataP = "Stop calib Line";
+		}
+		else {
+			*dataP = "Start calib Line";
+		}
+		flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	}
+	else if (event==LCDMENU_EVENT_ENTER) { /* toggle setting */
+		if (isCalibMode) {
+			(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_CALIB_LINE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+		}
+		else {
+			(void)RAPP_SendPayloadDataBlock((uint8_t*)"1", sizeof("1")-1, RAPP_MSG_TYPE_CALIB_LINE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+		}
+		flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
+	}
+	return flags;
+}
+
 static const LCDMenu_MenuItem menus[] =
 {/* id,								grp,pos,up,							down,						text,				callback					flags                  */
     {LCD_MENU_ID_MAIN,				0,	0,	LCD_MENU_ID_NONE,       	LCD_MENU_ID_BACKLIGHT,		"Remote Settings",  NULL,                       LCDMENU_MENU_FLAGS_NONE},
@@ -153,7 +180,8 @@ static const LCDMenu_MenuItem menus[] =
 		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,		LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_HAPPY,4,	1,	LCD_MENU_ID_ROBO_MUSIC,		LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
-		{LCD_MENU_ID_ROBO_SETTINGS,	2,	2,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_SEARCH_START,	"settings",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_SETTINGS,	2,	2,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_CALIB_LINE,		"settings",			LineCalibMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
+			{LCD_MENU_ID_CALIB_LINE,5,	0,	LCD_MENU_ID_ROBO_SETTINGS,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_NONE},
 	{LCD_MENU_ID_GAMES,				0,	2,	LCD_MENU_ID_NONE,			LCD_MENU_ID_TETRIS,			"Games",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_TETRIS,		3,	0,	LCD_MENU_ID_GAMES,			LCD_MENU_ID_NONE,			"Tetris",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_SNAKE,			3,	1,	LCD_MENU_ID_GAMES,			LCD_MENU_ID_NONE,			"Snake",			NULL,						LCDMENU_MENU_FLAGS_NONE},

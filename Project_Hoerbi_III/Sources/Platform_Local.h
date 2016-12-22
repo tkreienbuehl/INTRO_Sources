@@ -87,11 +87,11 @@
 #define PL_SPEED_RIGHT_D_FACTOR100           (0)
 #define PL_SPEED_RIGHT_I_ANTI_WINDUP     (40000)
 
-#define PL_LINE_FOLLOW_P_FACTOR100           (270)
-#define PL_LINE_FOLLOW_I_FACTOR100           (50)
-#define PL_LINE_FOLLOW_D_FACTOR100           (0)
-#define PL_LINE_FOLLOW_I_ANTI_WINDUP         (5000)
-#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     (45)				  /* max allowed speed in percent in line following mode*/
+#define PL_LINE_FOLLOW_P_FACTOR100           (300)
+#define PL_LINE_FOLLOW_I_FACTOR100           (80)
+#define PL_LINE_FOLLOW_D_FACTOR100           (8)
+#define PL_LINE_FOLLOW_I_ANTI_WINDUP         (2000)
+#define PL_LINE_FOLLOW_MAX_SPEED_PERCENT     (60)				  /* max allowed speed in percent in line following mode*/
 
 #define PL_POS_LEFT_P_FACTOR100              (250)
 #define PL_POS_LEFT_I_FACTOR100              (1)
@@ -99,6 +99,6 @@
 #define PL_POS_LEFT_I_ANTI_WINDUP            (80)
 #define PL_POS_LEFT_MAX_SPEED_PERCENT        (80) 			  /* max allowed speed in percent in positioning mode*/
 
-#define PL_POS_ANG_VALUE_90                  (690)
+#define PL_POS_ANG_VALUE_90                  (610)
 
 #endif /* SOURCES_PLATFORM_LOCAL_H_ */
