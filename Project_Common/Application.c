@@ -121,19 +121,6 @@ void APP_EventHandler(EVNT_Handle event) {
 			EVNT_SetEvent(EVNT_SNAKE_START_PAUSE);
 		#endif
 		break;
-	case EVNT_SW4_PRESSED:
-		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
-		SHELL_SendString((uint8_t*)"SW4 pressed\r\n");
-		#if PL_CONFIG_HAS_BUZZER
-			BUZ_PlayTune(BUZ_TUNE_BUTTON);
-		#endif
-		#if PL_CONFIG_HAS_LCD_MENU
-			EVNT_SetEvent(EVNT_LCD_BTN_CENTER);
-		#endif
-		#if PL_CONFIG_HAS_SNAKE_GAME
-			EVNT_SetEvent(EVNT_SNAKE_START_PAUSE);
-		#endif
-		break;
 	case EVNT_SW4_LPRESSED:
 		//CLS1_SendStr((const uint8*)"SW2 pressed\r\n", CLS1_GetStdio()->stdOut);
 		SHELL_SendString((uint8_t*)"SW4 long pressed\r\n");
