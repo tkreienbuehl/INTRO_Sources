@@ -47,6 +47,8 @@ typedef enum {
 #define LF_START_FOLLOWING (1<<0)  /* start line following */
 #define LF_STOP_FOLLOWING  (1<<1)  /* stop line following */
 
+#define LINE_LOST_MAX		3
+
 static volatile StateType LF_currState = STATE_IDLE;
 static xTaskHandle LFTaskHandle;
 #if PL_CONFIG_HAS_LINE_MAZE
@@ -95,29 +97,36 @@ static REF_LineKind FollowSegment(void) {
 
 static void StateMachine(void) {
 	REF_LineKind lineKind;
+	static uint8_t stopCounter=0;
   switch (LF_currState) {
     case STATE_IDLE:
       break;
     case STATE_FOLLOW_SEGMENT:
     	lineKind= FollowSegment();
       if (lineKind == REF_LINE_FULL) {
-        LF_currState = STATE_STOP; /* stop if we do not have a line any more */
-        SHELL_SendString((unsigned char*)"No line, stopped!\r\n");
-        uint8_t buf[2];
-        buf[0] = 2;
-        buf[1] = 'C';
-        (void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
-
+    	stopCounter++;
+    	if (stopCounter>=LINE_LOST_MAX){
+    		  LF_currState = STATE_STOP; /* stop if we do not have a line any more */
+    		  SHELL_SendString((unsigned char*)"No line, stopped!\r\n");
+    		  uint8_t buf[2];
+    		  buf[0] = 2;
+    		  buf[1] = 'C';
+    		  (void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
+    		  stopCounter=0;
+    	}
       }
       else if (lineKind == REF_LINE_NONE) {
+    	 stopCounter=0;
 		LF_currState = STATE_TURN; /* make turn */
 		SHELL_SendString((unsigned char*)"no line, turn..\r\n");
       }
       else if (lineKind == REF_LINE_LEFT) {
+    	  stopCounter=0;
 		//LF_currState = STATE_LINE_LEFT; /* make turn */
 		//SHELL_SendString((unsigned char*)"line left, turn..\r\n");
       }
       else if (lineKind == REF_LINE_RIGHT) {
+    	  stopCounter=0;
 		//LF_currState = STATE_LINE_RIGHT; /* make turn */
 		//SHELL_SendString((unsigned char*)"line right, turn..\r\n");
       }
@@ -133,6 +142,7 @@ static void StateMachine(void) {
     	LF_currState=STATE_FOLLOW_SEGMENT;
     	break;
     case STATE_TURN:
+    	stopCounter=0;
     	TURN_TurnAngle(180,NULL);
     	(void)DRV_SetMode(DRV_MODE_NONE);
     	LF_currState=STATE_FOLLOW_SEGMENT;
@@ -140,6 +150,7 @@ static void StateMachine(void) {
       break;
 
     case STATE_FINISHED:
+    	stopCounter=0;
         LF_currState = STATE_STOP; /* stop if we do not have a line any more */
         SHELL_SendString((unsigned char*)"No line, finished!\r\n");
         LF_enableAutoTurn(false);
