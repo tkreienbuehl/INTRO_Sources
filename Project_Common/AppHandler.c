@@ -8,7 +8,7 @@
 static bool searchStartField = FALSE;
 static APPHDL_AppIDs currentApp = APPHDL_APP_ID_NONE;
 
-eventButtonUp(void) {
+void eventButtonUp(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_SPD, RNETA_GetDestAddr(), 0L);
@@ -19,7 +19,7 @@ eventButtonUp(void) {
 	}
 }
 
-eventButtonDown(void) {
+void eventButtonDown(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_DEC_SPD, RNETA_GetDestAddr(), 0L);
@@ -30,7 +30,7 @@ eventButtonDown(void) {
 	}
 }
 
-eventButtonRight(void) {
+void eventButtonRight(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_RIGHT, RNETA_GetDestAddr(), 0L);
@@ -41,7 +41,7 @@ eventButtonRight(void) {
 	}
 }
 
-eventButtonLeft(void) {
+void eventButtonLeft(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_LEFT, RNETA_GetDestAddr(), 0L);
@@ -52,7 +52,7 @@ eventButtonLeft(void) {
 	}
 }
 
-eventButtonCenterSchort(void) {
+void eventButtonCenterSchort(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_ZERO_DIR, RNETA_GetDestAddr(), 0L);
@@ -63,7 +63,7 @@ eventButtonCenterSchort(void) {
 	}
 }
 
-eventButtonCenterLong(void) {
+void eventButtonCenterLong(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		searchStartField = !searchStartField;
@@ -81,7 +81,7 @@ eventButtonCenterLong(void) {
 	}
 }
 
-eventButtonRightUp(void) {
+void eventButtonRightUp(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_LEFT, RNETA_GetDestAddr(), 0L);
@@ -92,7 +92,7 @@ eventButtonRightUp(void) {
 	}
 }
 
-eventButtonRightUpLong(void) {
+void eventButtonRightUpLong(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_STOP, RNETA_GetDestAddr(), 0L);
@@ -103,7 +103,7 @@ eventButtonRightUpLong(void) {
 	}
 }
 
-eventButtonRightDown(void) {
+void eventButtonRightDown(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_TURN_RIGHT, RNETA_GetDestAddr(), 0L);
@@ -114,7 +114,7 @@ eventButtonRightDown(void) {
 	}
 }
 
-eventEnterApplication(void) {
+void eventEnterApplication(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_START_DRIVE, RNETA_GetDestAddr(), 0L);
@@ -126,7 +126,7 @@ eventEnterApplication(void) {
 	APPHDL_isInAppMode = TRUE;
 }
 
-eventExitApplication(void) {
+void eventExitApplication(void) {
 	switch (currentApp) {
 	case APPHDL_APP_ID_ROBO:
 		APPHDL_isInAppMode = FALSE;

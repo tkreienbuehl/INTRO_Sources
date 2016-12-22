@@ -385,7 +385,10 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
     	DRV_SetMode(DRV_MODE_SPEED);
     	DRV_SetSpeed(0,0);
-    	(void)RAPP_SendPayloadDataBlock((uint8_t*)"A", sizeof("A")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
+    	uint8_t buf[2];
+    	buf[0] = 2;
+    	buf[1] = 'A';
+    	(void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
