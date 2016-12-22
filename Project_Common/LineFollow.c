@@ -103,7 +103,11 @@ static void StateMachine(void) {
       if (lineKind == REF_LINE_FULL) {
         LF_currState = STATE_STOP; /* stop if we do not have a line any more */
         SHELL_SendString((unsigned char*)"No line, stopped!\r\n");
-        (void)RAPP_SendPayloadDataBlock((uint8_t*)"C", sizeof("C")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
+        uint8_t buf[2];
+        buf[0] = 2;
+        buf[1] = 'C';
+        (void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
+
       }
       else if (lineKind == REF_LINE_NONE) {
 		LF_currState = STATE_TURN; /* make turn */
@@ -179,7 +183,10 @@ static void LineTask (void *pvParameters) {
     		  SHELL_SendString("Activatet Line Follow!\r\n");
     		  PID_Start();
     		  enableAutoTurn=false;
-    		  (void)RAPP_SendPayloadDataBlock((uint8_t*)"B", sizeof("B")-1, RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
+    		  uint8_t buf[2];
+    	       buf[0] = 2;
+    	       buf[1] = 'B';
+    		  (void)RAPP_SendPayloadDataBlock(buf, sizeof(buf), RAPP_MSG_TYPE_SIGNALS, ADDRESS_SIGNALS, RPHY_PACKET_FLAGS_REQ_ACK);
     		  LF_currState=STATE_TURN;	//start fine state
     	  }
     }
