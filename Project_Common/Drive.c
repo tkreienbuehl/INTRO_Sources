@@ -21,6 +21,8 @@
 #include "Shell.h"
 #include "WAIT1.h"
 
+static int16_t MAX_SPEED = 7000;
+
 struct {
   DRV_Mode mode;
   struct {
@@ -146,6 +148,12 @@ void DRV_ChangeSpeed(int32_t leftChange, int32_t rightChange) {
 	}
 	left+=leftChange;
 	right+=rightChange;
+	if (right> MAX_SPEED) {
+		right = MAX_SPEED;
+	}
+	if (left > MAX_SPEED) {
+		left = MAX_SPEED;
+	}
 	(void)DRV_SetSpeed(left, right);
 }
 

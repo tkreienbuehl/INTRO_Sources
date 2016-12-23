@@ -28,6 +28,7 @@
   #include "Turn.h"
   #include "LineFollow.h"
   #include "Reflectance.h"
+  #include "Tacho.h"
 #endif
 #if PL_CONFIG_HAS_LEDS
   #include "LED.h"
@@ -38,6 +39,16 @@
 #if PL_CONFIG_HAS_SHELL
   #include "Shell.h"
 #endif
+
+typedef union {
+	int32_t val32;
+	struct {
+		int8_t a;
+		int8_t b;
+		int8_t c;
+		int8_t d;
+	} bytes;
+} converter;
 
 static bool REMOTE_isOn = FALSE;
 static bool REMOTE_isVerbose = FALSE;
@@ -322,7 +333,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(300, 300);
+    	DRV_ChangeSpeed(400, 400);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -331,7 +342,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-300, -300);
+    	DRV_ChangeSpeed(-400, -400);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -340,7 +351,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(-200, 200);
+    	DRV_ChangeSpeed(-250, 250);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -349,7 +360,7 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	DRV_ChangeSpeed(200, -200);
+    	DRV_ChangeSpeed(250, -250);
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif
@@ -417,14 +428,38 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	*handled = true;
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
-    	int32_t speed;
+    	converter speed;
+    	uint8_t lbuf[4];
     	if (val == 'L') {
-    		speed = TACHO_GetSpeed(TRUE);
-    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"L", sizeof("L")-1, RAPP_MSG_TYPE_SEND_SPEED, RNETA_GetDestAddr(), 0L);
+    		speed.val32 = TACHO_GetSpeed(TRUE);
+
     	}
     	else if (val == 'R') {
-    		speed = TACHO_GetSpeed(FALSE);
-    		(void)RAPP_SendPayloadDataBlock((uint8_t*)"R", sizeof("R")-1, RAPP_MSG_TYPE_SEND_SPEED, RNETA_GetDestAddr(), 0L);
+    		speed.val32 = TACHO_GetSpeed(FALSE);
+    	}
+		lbuf[0] = (uint8_t)speed.bytes.a;
+		lbuf[1] = (uint8_t)speed.bytes.b;
+		lbuf[2] = (uint8_t)speed.bytes.c;
+		lbuf[3] = (uint8_t)speed.bytes.d;
+    	(void)RAPP_SendPayloadDataBlock(lbuf, sizeof(lbuf), RAPP_MSG_TYPE_SEND_SPEED, RNETA_GetDestAddr(), 0L);
+#else
+		*handled = FALSE; /* no shell and no buzzer? */
+#endif
+		break;
+    case RAPP_MSG_TYPE_SEND_SPEED:
+    	*handled = true;
+    	//val = *data; /* get data value */
+#if PL_CONFIG_HAS_REMOTE && PL_CONFIG_BOARD_IS_REMOTE
+    	converter speedR;
+    	speedR.bytes.a = (int8_t)data[0];
+    	speedR.bytes.b = (int8_t)data[1];
+    	speedR.bytes.c = (int8_t)data[2];
+    	speedR.bytes.d = (int8_t)data[3];
+    	if (val == 'L') {
+
+    	}
+    	else if (val == 'R') {
+
     	}
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
@@ -435,14 +470,6 @@ uint8_t REMOTE_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *
     	val = *data; /* get data value */
 #if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
     	REF_CalibrateStartStop();
-#else
-		*handled = FALSE; /* no shell and no buzzer? */
-#endif
-		break;
-    case RAPP_MSG_TYPE_SEND_SPEED:
-    	*handled = true;
-    	val = *data; /* get data value */
-#if PL_CONFIG_HAS_DRIVE && PL_CONFIG_HAS_REMOTE
 #else
 		*handled = FALSE; /* no shell and no buzzer? */
 #endif

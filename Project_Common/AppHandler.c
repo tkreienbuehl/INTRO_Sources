@@ -4,6 +4,7 @@
 #include "RApp.h"
 #include "LCD.h"
 #include "LCDMenu.h"
+#include "RTOS.h"
 
 static bool searchStartField = FALSE;
 static APPHDL_AppIDs currentApp = APPHDL_APP_ID_NONE;
@@ -13,6 +14,12 @@ void eventButtonUp(void) {
 	case APPHDL_APP_ID_ROBO:
 		(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_INC_SPD, RNETA_GetDestAddr(), 0L);
 		LCD_PrintSWPressed((uint8_t*)"<driving>\nfaster");
+		/*
+		FRTOS1_vTaskDelay(pdMS_TO_TICKS(50));
+		(void)RAPP_SendPayloadDataBlock((uint8_t*)"L", sizeof("L")-1, RAPP_MSG_TYPE_GET_SPEED, RNETA_GetDestAddr(), 0L);
+		FRTOS1_vTaskDelay(pdMS_TO_TICKS(50));
+		(void)RAPP_SendPayloadDataBlock((uint8_t*)"R", sizeof("R")-1, RAPP_MSG_TYPE_GET_SPEED, RNETA_GetDestAddr(), 0L);
+		*/
 		break;
 	default:
 		break;

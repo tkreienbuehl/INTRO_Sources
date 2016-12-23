@@ -161,9 +161,11 @@ static LCDMenu_StatusFlags LineCalibMenuHandler(const struct LCDMenu_MenuItem_ *
 	else if (event==LCDMENU_EVENT_ENTER) { /* toggle setting */
 		if (isCalibMode) {
 			(void)RAPP_SendPayloadDataBlock((uint8_t*)"0", sizeof("0")-1, RAPP_MSG_TYPE_CALIB_LINE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+			isCalibMode = FALSE;
 		}
 		else {
 			(void)RAPP_SendPayloadDataBlock((uint8_t*)"1", sizeof("1")-1, RAPP_MSG_TYPE_CALIB_LINE, RNETA_GetDestAddr(), RPHY_PACKET_FLAGS_REQ_ACK);
+			isCalibMode = TRUE;
 		}
 		flags |= LCDMENU_STATUS_FLAGS_HANDLED|LCDMENU_STATUS_FLAGS_UPDATE_VIEW;
 	}
@@ -180,8 +182,8 @@ static const LCDMenu_MenuItem menus[] =
 		{LCD_MENU_ID_ROBO_MUSIC,	2,	1,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_PLAY_TUNE,		"Music",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_TUNE,	4,	0,	LCD_MENU_ID_ROBO_MUSIC,		LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
 			{LCD_MENU_ID_PLAY_HAPPY,4,	1,	LCD_MENU_ID_ROBO_MUSIC,		LCD_MENU_ID_NONE,			NULL,				PlayMusicMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
-		{LCD_MENU_ID_ROBO_SETTINGS,	2,	2,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_CALIB_LINE,		"settings",			LineCalibMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
-			{LCD_MENU_ID_CALIB_LINE,5,	0,	LCD_MENU_ID_ROBO_SETTINGS,	LCD_MENU_ID_NONE,			NULL,				NULL,						LCDMENU_MENU_FLAGS_NONE},
+		{LCD_MENU_ID_ROBO_SETTINGS,	2,	2,	LCD_MENU_ID_ROBO_MAIN,		LCD_MENU_ID_CALIB_LINE,		"settings",			NULL,						LCDMENU_MENU_FLAGS_NONE},
+			{LCD_MENU_ID_CALIB_LINE,5,	0,	LCD_MENU_ID_ROBO_SETTINGS,	LCD_MENU_ID_NONE,			NULL,				LineCalibMenuHandler,		LCDMENU_MENU_FLAGS_NONE},
 	{LCD_MENU_ID_GAMES,				0,	2,	LCD_MENU_ID_NONE,			LCD_MENU_ID_TETRIS,			"Games",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_TETRIS,		3,	0,	LCD_MENU_ID_GAMES,			LCD_MENU_ID_NONE,			"Tetris",			NULL,						LCDMENU_MENU_FLAGS_NONE},
 		{LCD_MENU_ID_SNAKE,			3,	1,	LCD_MENU_ID_GAMES,			LCD_MENU_ID_NONE,			"Snake",			NULL,						LCDMENU_MENU_FLAGS_NONE},
@@ -200,82 +202,6 @@ uint8_t LCD_HandleRemoteRxMessage(RAPP_MSG_Type type, uint8_t size, uint8_t *dat
   return ERR_OK;
 }
 #endif /* PL_CONFIG_HAS_LCD_MENU */
-
-/*
-static void DrawLines(void) {
-  int i;
-  GDisp1_PixelDim x, y, w, h;
-
-  GDisp1_Clear();
-  GDisp1_UpdateFull();
-
-  GDisp1_DrawBox(0, 0, 10, 10, 1, GDisp1_COLOR_BLACK);
-  GDisp1_UpdateFull();
-  vTaskDelay(pdMS_TO_TICKS(500));
-
-  GDisp1_DrawBox(GDisp1_GetWidth()-10, 0, 10, 10, 1, GDisp1_COLOR_BLACK);
-  GDisp1_UpdateFull();
-  vTaskDelay(pdMS_TO_TICKS(500));
-
-  GDisp1_DrawLine(0, 0, GDisp1_GetWidth(), GDisp1_GetHeight(), GDisp1_COLOR_BLACK);
-  GDisp1_UpdateFull();
-  vTaskDelay(pdMS_TO_TICKS(500));
-  GDisp1_DrawLine(0, GDisp1_GetHeight(), GDisp1_GetWidth(), 0, GDisp1_COLOR_BLACK);
-  GDisp1_UpdateFull();
-  vTaskDelay(pdMS_TO_TICKS(500));
-  for(i=0;i<10;i++) {
-    GDisp1_DrawCircle(GDisp1_GetWidth()/2, GDisp1_GetHeight()/2, 5+i*2, GDisp1_COLOR_BLACK);
-    GDisp1_UpdateFull();
-    vTaskDelay(pdMS_TO_TICKS(100));
-  }
-}
-*/
-
-/*
-static void DrawCircles(void) {
-	GDisp1_PixelDim x, y;
-	static uint8_t xPosMax = GDisp1_GetWidth()-5;
-	static uint8_t yPosMax = GDisp1_GetHeight()-5;
-
-	LCD_LED_On();
-	GDisp1_Clear();
-	GDisp1_UpdateFull();
-
-	for (int i=0; i<10; i++) {
-		do {
-			x = (GDisp1_PixelDim)rand()+5;
-		}
-		while(x > xPosMax);
-		do {
-			y = (GDisp1_PixelDim)rand()+5;
-		}
-		while(y>yPosMax);
-		GDisp1_DrawCircle(x,y,5,GDisp1_COLOR_BLACK);
-		GDisp1_UpdateFull();
-		vTaskDelay(pdMS_TO_TICKS(250));
-		GDisp1_Clear();
-		GDisp1_UpdateFull();
-	}
-}
-
-static void DrawFont(void) {
-  FDisp1_PixelDim x, y;
-
-  GDisp1_Clear();
-  GDisp1_UpdateFull();
-  x = 0;
-  y = 10;
-  FDisp1_WriteString("Hello World!", GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
-  GDisp1_UpdateFull();
-  vTaskDelay(pdMS_TO_TICKS(500));
-  x = 0;
-  y += GFONT1_GetBoxHeight();
-  FDisp1_WriteString("with Fonts!", GDisp1_COLOR_BLACK, &x, &y, GFONT1_GetFont());
-  GDisp1_UpdateFull();
-  WAIT1_Waitms(1000);
-}
-
-*/
 
 static void drawWheel(GDisp1_PixelDim x, GDisp1_PixelDim y, uint8_t idx) {
 
